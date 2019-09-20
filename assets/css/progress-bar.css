@@ -1,0 +1,35 @@
+.formBody
+{ 
+  padding: 4px auto
+}
+.fileform 
+{ 
+  display: block; 
+  margin: 10px auto; 
+  background: #ffffff; 
+  border-radius: 5px; 
+  padding: 0px 
+}
+.progress 
+{
+  display:block; 
+  position:relative; 
+  width:auto; 
+  border: 2px solid #ddd; 
+  padding: 10px; 
+  border-radius: 3px; 
+}
+#bar1 
+{ 
+  background-color: rgba(46, 204, 113, 1); 
+  width:0%; 
+  height:20px; 
+  border-radius: 4px; 
+}
+.percent 
+{ 
+  position:absolute; 
+  display:inline-block; 
+  top:3px; 
+  left:48%; 
+}

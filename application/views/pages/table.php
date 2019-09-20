@@ -19,8 +19,7 @@ include('application/dataAccessObjects/ListFiles.php');
                 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
                 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
                 <link href="<?php echo base_url(); ?>assets/css/modal.css" type="text/css" rel="stylesheet" />
-                
-
+                <link href="<?php echo base_url();?>assets/css/progress-bar.css" type="text/css" rel="stylesheet"/>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/sha1.js"></script>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/sha1-min.js"></script>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/lib-typedarrays-min.js"></script>
@@ -135,14 +134,18 @@ $i++;
 
 <div id="MyModal" class="modal">
 
-  <!-- Modal content -->
-  <div class="modal-content">
+  <!-- Modal content for upload-->
+  <div class="modal-content" >
     <span class="close">&times;</span>
-    <form  id="fileform"  method="post" enctype="multipart/form-data" action="">
-    Select file to upload:
-    <input type="file" name="userfile" id="userfile" ><br>
-    <input type="submit" name="botonUpload" id="botonUpload" value="Upload">
-    </form>
+    <form  id="fileform" class="fileform" method="post" enctype="multipart/form-data">
+      Select file to upload:
+      <input type="file" name="userfile" id="userfile" style="width:100%;"><br>
+      <input type="submit" name="botonUpload" id="botonUpload" value="Upload">
+    </form> 
+    <div class='progress' id="progress_div">
+      <div class='bar' id='bar1'></div>
+      <div class='percent' id='percent1'>0%</div>
+    </div>
   </div>
 
 </div>
@@ -259,7 +262,7 @@ xmlhttp.send();
                     }
                
                     
-                   
+                var bar = $('#bar');   
 
                 $.ajax({                            
                                              
@@ -280,6 +283,22 @@ xmlhttp.send();
                       cache:false,
                       processData: false,
                       contentType: false,
+                      xhr: function() {
+                                          var xhr = new window.XMLHttpRequest();
+                                          xhr.upload.addEventListener("progress", function(evt) {
+                                              if (evt.lengthComputable) {
+                                                  var percentComplete = evt.loaded / evt.total;
+                                                  var porcentaje = percentComplete.toFixed(2) * 100;
+                                                  //Do something with upload progress here
+                                                  document.getElementById("percent1").innerHTML=porcentaje+"%";
+                                                  document.getElementById("bar1").style.width=porcentaje+"%";
+                                                 // percent.html(percentVal);
+
+                                              }
+                                        }, false);                                
+                                      
+                                        return xhr;
+                                      },
                       complete: function(data){
                         console.log('succes: '+data.responseText);
                         alert("Refresh Page");
