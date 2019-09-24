@@ -9,6 +9,13 @@ class LoginController extends CI_Controller {
         $this->load->helper('form');
         $this->load->helper('url');
     }
+    
+    public function index() {
+        echo "<pre>";
+        var_dump("hola");
+        echo "</pre>";
+        die();
+    }
 
     public function validation() {
 
