@@ -48,7 +48,7 @@
                                                     <li>
                                                         <a href="#">
                                                             <div class="message-img">
-                                                                <img src="img/contact/1.jpg" alt="">
+                                                                <img src="assets/template/img/contact/1.jpg" alt="">
                                                             </div>
                                                             <div class="message-content">
                                                                 <span class="message-date">16 Sept</span>
@@ -60,7 +60,7 @@
                                                     <li>
                                                         <a href="#">
                                                             <div class="message-img">
-                                                                <img src="img/contact/4.jpg" alt="">
+                                                                <img src="assets/template/img/contact/4.jpg" alt="">
                                                             </div>
                                                             <div class="message-content">
                                                                 <span class="message-date">16 Sept</span>
@@ -72,7 +72,7 @@
                                                     <li>
                                                         <a href="#">
                                                             <div class="message-img">
-                                                                <img src="img/contact/3.jpg" alt="">
+                                                                <img src="assets/template/img/contact/3.jpg" alt="">
                                                             </div>
                                                             <div class="message-content">
                                                                 <span class="message-date">16 Sept</span>
@@ -84,7 +84,7 @@
                                                     <li>
                                                         <a href="#">
                                                             <div class="message-img">
-                                                                <img src="img/contact/2.jpg" alt="">
+                                                                <img src="assets/template/img/contact/2.jpg" alt="">
                                                             </div>
                                                             <div class="message-content">
                                                                 <span class="message-date">16 Sept</span>
@@ -161,7 +161,7 @@
                                         </li>
                                         <li class="nav-item">
                                             <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
-                                                <img src="img/product/pro4.jpg" alt="" />
+                                                <img src="assets/template/img/product/pro4.jpg" alt="" />
                                                 <span class="admin-name">Prof.Anderson</span>
                                                 <i class="fa fa-angle-down edu-icon edu-down-arrow"></i>
                                             </a>
@@ -203,7 +203,7 @@
                                                                         <a href="#">
                                                                             <div class="notes-list-flow">
                                                                                 <div class="notes-img">
-                                                                                    <img src="img/contact/4.jpg" alt="" />
+                                                                                    <img src="assets/template/img/contact/4.jpg" alt="" />
                                                                                 </div>
                                                                                 <div class="notes-content">
                                                                                     <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
@@ -216,7 +216,7 @@
                                                                         <a href="#">
                                                                             <div class="notes-list-flow">
                                                                                 <div class="notes-img">
-                                                                                    <img src="img/contact/1.jpg" alt="" />
+                                                                                    <img src="assets/template/img/contact/1.jpg" alt="" />
                                                                                 </div>
                                                                                 <div class="notes-content">
                                                                                     <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
@@ -229,7 +229,7 @@
                                                                         <a href="#">
                                                                             <div class="notes-list-flow">
                                                                                 <div class="notes-img">
-                                                                                    <img src="img/contact/2.jpg" alt="" />
+                                                                                    <img src="assets/template/img/contact/2.jpg" alt="" />
                                                                                 </div>
                                                                                 <div class="notes-content">
                                                                                     <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
@@ -242,7 +242,7 @@
                                                                         <a href="#">
                                                                             <div class="notes-list-flow">
                                                                                 <div class="notes-img">
-                                                                                    <img src="img/contact/3.jpg" alt="" />
+                                                                                    <img src="assets/template/img/contact/3.jpg" alt="" />
                                                                                 </div>
                                                                                 <div class="notes-content">
                                                                                     <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
@@ -255,7 +255,7 @@
                                                                         <a href="#">
                                                                             <div class="notes-list-flow">
                                                                                 <div class="notes-img">
-                                                                                    <img src="img/contact/4.jpg" alt="" />
+                                                                                    <img src="assets/template/img/contact/4.jpg" alt="" />
                                                                                 </div>
                                                                                 <div class="notes-content">
                                                                                     <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
@@ -268,7 +268,7 @@
                                                                         <a href="#">
                                                                             <div class="notes-list-flow">
                                                                                 <div class="notes-img">
-                                                                                    <img src="img/contact/1.jpg" alt="" />
+                                                                                    <img src="assets/template/img/contact/1.jpg" alt="" />
                                                                                 </div>
                                                                                 <div class="notes-content">
                                                                                     <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
@@ -281,7 +281,7 @@
                                                                         <a href="#">
                                                                             <div class="notes-list-flow">
                                                                                 <div class="notes-img">
-                                                                                    <img src="img/contact/2.jpg" alt="" />
+                                                                                    <img src="assets/template/img/contact/2.jpg" alt="" />
                                                                                 </div>
                                                                                 <div class="notes-content">
                                                                                     <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
@@ -294,7 +294,7 @@
                                                                         <a href="#">
                                                                             <div class="notes-list-flow">
                                                                                 <div class="notes-img">
-                                                                                    <img src="img/contact/1.jpg" alt="" />
+                                                                                    <img src="assets/template/img/contact/1.jpg" alt="" />
                                                                                 </div>
                                                                                 <div class="notes-content">
                                                                                     <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
@@ -307,7 +307,7 @@
                                                                         <a href="#">
                                                                             <div class="notes-list-flow">
                                                                                 <div class="notes-img">
-                                                                                    <img src="img/contact/2.jpg" alt="" />
+                                                                                    <img src="assets/template/img/contact/2.jpg" alt="" />
                                                                                 </div>
                                                                                 <div class="notes-content">
                                                                                     <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
@@ -320,7 +320,7 @@
                                                                         <a href="#">
                                                                             <div class="notes-list-flow">
                                                                                 <div class="notes-img">
-                                                                                    <img src="img/contact/3.jpg" alt="" />
+                                                                                    <img src="assets/template/img/contact/3.jpg" alt="" />
                                                                                 </div>
                                                                                 <div class="notes-content">
                                                                                     <p> The point of using Lorem Ipsum is that it has a more-or-less normal.</p>
