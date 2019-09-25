@@ -17,13 +17,11 @@ include('application/dataAccessObjects/ListFiles.php');
                 crossorigin="anonymous"></script>
 
                 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-                <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-                <link href="<?php echo base_url(); ?>assets/css/modal.css" type="text/css" rel="stylesheet" />
+               <!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+                <link href="<?php echo base_url(); ?>assets/css/bootstrap.css" type="text/css" rel="stylesheet"/>
+                <link href="<?php echo base_url(); ?>assets/css/modal.css" type="text/css" rel="stylesheet"/>
                 <link href="<?php echo base_url();?>assets/css/progress-bar.css" type="text/css" rel="stylesheet"/>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/sha1.js"></script>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/sha1-min.js"></script>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/lib-typedarrays-min.js"></script>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+                
                 <!------ Include the above in your HEAD tag ---------->
 
                 
@@ -139,8 +137,9 @@ $i++;
     <span class="close">&times;</span>
     <form  id="fileform" class="fileform" method="post" enctype="multipart/form-data">
       Select file to upload:
-      <input type="file" name="userfile" id="userfile" style="width:100%;"><br>
+      <input type="file" name="userfile" id="userfile" style="width:100%;" multiple><br>
       <input type="submit" name="botonUpload" id="botonUpload" value="Upload">
+      
     </form> 
     <div class='progress' id="progress_div">
       <div class='bar' id='bar1'></div>
@@ -189,8 +188,7 @@ $(document).ready(function(){
   var filename;
   var filetype;
   var filesize;
-  var arrayJSON;
-  var sha;
+  var arrayJSON;  
 
   function CB( callback){
     
@@ -201,69 +199,101 @@ $(document).ready(function(){
 
   
 //llamada al upload.php
-  var xmlhttp = new XMLHttpRequest();  
-  xmlhttp.onreadystatechange=function()
-{//Datos del input file
-  //var arrayJSON;
-  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-{ 
-  // Parse the JSON data structure contained in xmlhttp.responseText using the JSON.parse function.
-                  /*CB(function(x){
-                                   JSONObject = JSON.parse(x);
-                                   arrayJSON = Object.values(JSONObject);                                  
-                                });*/
-  }
 
-  }
-  
-xmlhttp.open("post","<?php echo base_url("index.php/uploadFile")?>",true);
-xmlhttp.send(); 
-          
+
 
         $("#fileform").submit(function(e){
             e.preventDefault();
                       
-                             
+          //var index=0;
+          var file=document.getElementById("userfile");                          
                                                      
-                             
-            filename = $('input[type=file]')[0].files[0].name ;
+          /*for(index=0; index<files.length; index++){     
+
+            filename = $('input[type=file]')[0].files[index].name ;
             filenameR= filename.replace(/ /g, "_");
-            filetype = $('input[type=file]')[0].files[0].type ;
-            filesize = $('input[type=file]')[0].files[0].size ;               
-                                                                                    
+            filetype = $('input[type=file]')[0].files[index].type ;
+            filesize = $('input[type=file]')[0].files[index].size ;               
                 //POST del archivo
                 
+             
+            var file = document.getElementById("userfile");
+            //var file = fileInput.files[index];
+            
+            }*/
+
+            sendAllFiles(file);
+
+            
+              
+
+  });
+             
+
+
+});
+
+
+function sendAllFiles(file) { //Sube todos los archivos encadenados con iteracion manual
+    var index = 0;
+
+    function next() {
+        var data;
+        if (index < file.length) {
+            
+
+            data = new FormData();
+            data.append("file", file);
+              
+            console.log(arrayJSON);
+            console.log(filenameR);
+            console.log(filetype);
+               
+            console.log(filesize);
+            for (let [key, value] of data.entries()) {
+                console.log(key, ':', value);
+              } 
+            ++index;
+            // send this file and when done, do the next iteration
+            permisosURL();
             CB(function(x){
-                                  var JSONObject = JSON.parse(x);
-                                  //console.log(JSONObject);
-                                  arrayJSON = Object.values(JSONObject);
-                                  //console.log(arrayJSON);
-                                  console.log(arrayJSON[2]);
+              var JSONObject = JSON.parse(x);                                  
+              arrayJSON = Object.values(JSONObject);                                
+              console.log(arrayJSON[2]);
                                 
             });
+            subirArchivo(data).then(next);
+        } else {
+            
+        }
+    }
+    // start the first iteration
+    next();
+}
 
-                           
+//peticion para pedir las credenciales(URL y authToken) para subir archivos
+function permisosURL(){
+  var xmlhttp = new XMLHttpRequest();  
+  xmlhttp.onreadystatechange=function()
+  {//Datos del input file
+    //var arrayJSON;
+    if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    { 
+    // Parse the JSON data structure contained in xmlhttp.responseText using the JSON.parse function.
+                    /*CB(function(x){
+                                    JSONObject = JSON.parse(x);
+                                    arrayJSON = Object.values(JSONObject);                                  
+                                  });*/
+    }
 
-                  
-                  
-                var fileInput = document.getElementById("userfile");
-                var file = fileInput.files[0];
+  }
 
-                var data = new FormData();
-                data.append("file", file); 
-                
-                console.log(arrayJSON);
-                console.log(filenameR);
-                console.log(filetype);
-                console.log(sha);
-                console.log(filesize);
-                for (let [key, value] of data.entries()) {
-                      console.log(key, ':', value);
-                    }
-               
-                    
-                var bar = $('#bar');   
-
+  
+  xmlhttp.open("post","<?php echo base_url("index.php/uploadFile")?>",true);
+  xmlhttp.send(); 
+} 
+//peticion AJAX para subir el archivo
+function subirArchivo(data){
                 $.ajax({                            
                                              
                      url: arrayJSON[2],                      
@@ -307,13 +337,7 @@ xmlhttp.send();
                       console.log(data.responseText);
                     }
                     });
-                
-  });
-             
-
-
-});
-
+              }
 </script>
 
 
