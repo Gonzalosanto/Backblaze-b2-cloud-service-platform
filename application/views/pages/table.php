@@ -190,10 +190,7 @@ $(document).ready(function(){
   var filesize;
   var arrayJSON;  
 
-  function CB( callback){
-    
-    return (callback(xmlhttp.responseText))
-  }
+  
 
  
 
@@ -205,24 +202,31 @@ $(document).ready(function(){
         $("#fileform").submit(function(e){
             e.preventDefault();
                       
-          //var index=0;
-          var file=document.getElementById("userfile");                          
-                                                     
-          /*for(index=0; index<files.length; index++){     
+          var index=0;
+          var fileList=[];
+          var file=document.getElementById("userfile"); 
+         // var fileList = new Array();
+          
+         // var file = fileInput.files[0];                         
+          console.log(file);                                           
+          for(index=0; index<file.files.length; index++){  //Recorre los archivos a subir y los pushea en un array
+            fileList.push(file.files[index]);
+            console.log(fileList[index]); //imprime el array de archivo por elemento
+          }   
 
-            filename = $('input[type=file]')[0].files[index].name ;
+          /*  filename = $('input[type=file]')[0].files[index].name ;
             filenameR= filename.replace(/ /g, "_");
             filetype = $('input[type=file]')[0].files[index].type ;
             filesize = $('input[type=file]')[0].files[index].size ;               
                 //POST del archivo
                 
              
-            var file = document.getElementById("userfile");
+            var files = document.getElementById("userfile");
             //var file = fileInput.files[index];
             
             }*/
 
-            sendAllFiles(file);
+            sendAllFiles(fileList);
 
             
               
@@ -240,8 +244,7 @@ function sendAllFiles(file) { //Sube todos los archivos encadenados con iteracio
     function next() {
         var data;
         if (index < file.length) {
-            
-
+            permisosURL();
             data = new FormData();
             data.append("file", file);
               
@@ -255,16 +258,11 @@ function sendAllFiles(file) { //Sube todos los archivos encadenados con iteracio
               } 
             ++index;
             // send this file and when done, do the next iteration
-            permisosURL();
-            CB(function(x){
-              var JSONObject = JSON.parse(x);                                  
-              arrayJSON = Object.values(JSONObject);                                
-              console.log(arrayJSON[2]);
-                                
-            });
+            
+           
             subirArchivo(data).then(next);
         } else {
-            
+            console.log("ERROR");
         }
     }
     // start the first iteration
@@ -280,10 +278,10 @@ function permisosURL(){
     if (xmlhttp.readyState==4 && xmlhttp.status==200)
     { 
     // Parse the JSON data structure contained in xmlhttp.responseText using the JSON.parse function.
-                    /*CB(function(x){
+                    CB(function(x){
                                     JSONObject = JSON.parse(x);
                                     arrayJSON = Object.values(JSONObject);                                  
-                                  });*/
+                                  });
     }
 
   }
@@ -338,6 +336,9 @@ function subirArchivo(data){
                     }
                     });
               }
+  function CB( callback){    
+    return (callback(xmlhttp.responseText))
+  }              
 </script>
 
 
