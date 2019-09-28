@@ -158,7 +158,7 @@ include('application/dataAccessObjects/ListFiles.php');
         function subir() {
 
             $.ajax({
-                url: '<?php echo base_url("index.php/uploadFile"); ?>',
+                url: '<?php echo base_url("index.php/UploadController/uploadFile2"); ?>',
                 type: 'POST',
                 success: function (dataobject) { //Funcion que retorna los datos procesados del script PHP .
                     var fileInput = document.getElementById("userfile");

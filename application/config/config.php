@@ -521,3 +521,39 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+
+
+/*
+|--------------------------------------------------------------------------
+| Configuracion de datos backblaze
+|--------------------------------------------------------------------------
+|
+| If your server is behind a reverse proxy, you must whitelist the proxy
+| IP addresses from which CodeIgniter should trust headers such as
+| HTTP_X_FORWARDED_FOR and HTTP_CLIENT_IP in order to properly identify
+| the visitor's IP address.
+|
+| You can use both an array or a comma-separated list of proxy addresses,
+| as well as specifying whole subnets. Here are a few examples:
+|
+| Comma-separated:	'10.0.1.200,192.168.5.0/24'
+| Array:		array('10.0.1.200', '192.168.5.0/24')
+*/
+$config['application_key_id'] = '0007481e2c43a070000000002';
+
+$config['application_key'] = 'K0004e0jBPIHRPRHgk3d/48u3bJb0o4';
+
+$config['url_authorization'] = 'https://api.backblazeb2.com/b2api/v2/b2_authorize_account';
+
+$config['bucket_id'] = '47e4c831aec2ece463ca0017';
+
+$config['url_upload'] = '/b2api/v2/b2_get_upload_url';
+
+
+
+
+
+
+
+
+
