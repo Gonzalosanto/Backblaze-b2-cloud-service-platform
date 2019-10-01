@@ -44,7 +44,9 @@ include('application/dataAccessObjects/ListFiles.php');
                     <td><?= formatSizeUnits($filesize) ?></td>
                     <td><?= $fecha ?></td>
                     <td>
-                        <button type="button" id="descargar<?= $i ?>"  onclick='descargar(<?= $i ?>, "<?= $nombreArchivo ?>");'>Descargar </button>
+                        <!--<button type="button" id="descargar<?= $i ?>"  onclick='descargar(<?= $i ?>, "<?= $nombreArchivo ?>");'>Descargar </button>-->
+                        <a href="http://localhost/PlataformaWEB/DownloadController/downloadFile?filename=<?= $nombreArchivo ?>">Descargar Archivo</a>
+                        <!--<button type="button" href="http://localhost/PlataformaWEB/DownloadController/downloadFile?filename=7.jpeg" download="7.jpeg" >Descargar </button>-->
                         <button type="button" id="eliminar<?= $i ?>" onclick='eliminar("<?= $i ?>", "<?= $idArchivo ?>", "<?= $nombreArchivo ?>")'>Eliminar </button>
                     </td>
                 </tr>

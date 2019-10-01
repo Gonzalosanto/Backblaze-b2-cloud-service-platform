@@ -1,4 +1,5 @@
 function subir() {
+    
     $('#botonUpload').attr("disabled", true);
     $.ajax({
         url: 'UploadController/uploadFile2',
