@@ -1,5 +1,4 @@
 <?php
-//header('Access-Control-Allow-Origin: *');
 include('application/dataAccessObjects/ListFiles.php');
 ?>
 <html>
@@ -18,10 +17,7 @@ include('application/dataAccessObjects/ListFiles.php');
         <script src='<?php echo base_url("assets/js/vieja/bootstrap.min.js"); ?>'></script>
         <link href='<?php echo base_url("assets/css/vieja/modal.css"); ?>' type="text/css" rel="stylesheet" />
 
-        <script src='<?php echo base_url("assets/js/vieja/sha1.js"); ?>'></script>
-        <script src='<?php echo base_url("assets/js/vieja/sha1-min.js"); ?>'></script>
-        <script src='<?php echo base_url("assets/js/vieja/lib-typedarrays-min.js"); ?>'></script>
-        <script src='<?php echo base_url("assets/js/vieja/aes.js"); ?>'></script>
+    
         <!------ Include the above in your HEAD tag ---------->
 
     </head>
@@ -63,27 +59,28 @@ include('application/dataAccessObjects/ListFiles.php');
                                 while ($i < $countFileName) {
 
                                     $nomArchivo = $objetoObj['files'][$i]['fileName'];
+                                    $idArchivo = $objetoObj['files'][$i]['fileId'];
                                     $filesize = $objetoObj['files'][$i]['contentLength'];
                                     $timeStamp = $objetoObj['files'][$i]['uploadTimestamp'];
                                     $fechaDeSubida = date_create_from_format("U", $timeStamp / 1000);
                                     $fecha = date_format($fechaDeSubida, 'Y-m-d');
 
-                                    echo '<tr>
-            <td><input type="checkbox" class="checkthis" /></td>
-            <td>' . $nomArchivo . '</td>
-            <td>' . formatSizeUnits($filesize) . '</td>
-            <td>' . $fecha . '</td>
-     
-     
-     
-     
-     
-            <td><form action="index.php/downloadFile/' . $nomArchivo . '" method="GET">
-             <input type="hidden" name="filename" value="' . $nomArchivo . '">
-             <input type="submit" value="Descargar"></form></p></td>
-
-            <td><p title="Delete"><button class="btn btn-danger btn-xs" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
-            </tr>';
+                                    echo 
+                                    '<tr>
+                                    <td><input type="checkbox" class="checkthis" /></td>
+                                    <td id="nombreArchivo">' . $nomArchivo . '</td>
+                                    <td>' . formatSizeUnits($filesize) . '</td>
+                                    <td>' . $fecha . '</td>
+                                    <td id="idArchivo" hidden>' . $idArchivo . '</td> 
+                                    <td>
+                                    <form>
+                                    <input type="hidden" name="filename" value="' . $nomArchivo . '">
+                                    <input type="submit" onclick="descargar();" value="Descargar"></form></p>
+                                    </td>
+                                    <td>
+                                    <p title="Delete"><button class="btn btn-danger btn-xs" id="delete"><span class="glyphicon glyphicon-trash"></span></button></p>
+                                    </td>
+                                    </tr>';
 
 
                                     $i++;
@@ -155,10 +152,67 @@ include('application/dataAccessObjects/ListFiles.php');
             }
         };
 
+        //Borrar Archivo
+        
+            $("#delete").click(function(){            
+                
+                var nombreArchivo=$("#nombreArchivo").text();
+
+                var idArchivo = $("#idArchivo").text();
+                alert("boton clickeado para borrar " + nombreArchivo +" "+idArchivo);
+                $.ajax({
+                    url:'<?php echo base_url("index.php/DeleteController/deleteFile");?>',
+                    type:'post',
+                    data:{
+                        'filename' : nombreArchivo,
+                        'id' : idArchivo
+                    },
+                    success: function(data){
+                        console.log(data);
+                    },
+                    error: function(data){
+                        alert("ERROR");
+                        console.log(data);
+                    }
+
+                });
+            });
+        
+       
+
+        function descargar(){
+            var filename= $("#nombreArchivo").text();
+
+            $.ajax({
+                url: '<?php echo base_url("index.php/DownloadController/autorization");?>',
+                type: 'post',
+                success: function(data){
+                   // window.location.href: downloadUrl +"/file/archivo1992/"+filename;
+                    $.ajax({
+                        url: data.downloadUrl "https://f345.backblazeb2.com/file/archivo1992/"+data.bucketName+filename, //bucketName Hardcodeado... Cambiarlo por variable...
+                        type:'GET',
+                        header:{'Authorization': data.authorizationToken},
+                        success:function(data) {
+                            console.log(data)
+                        },
+                        error: function (data) {
+                            console.log(data);
+                        }
+                    });
+                },
+                complete: function (data) {
+                    alert(data);
+                },
+                error: function (data) {
+                    alert("ERROR"+data);
+                }
+            });
+        }
+
         function subir() {
 
             $.ajax({
-                url: '<?php echo base_url("index.php/UploadController/uploadFile2"); ?>',
+                url: '<?php echo base_url("UploadController/uploadFile2"); ?>',
                 type: 'POST',
                 success: function (dataobject) { //Funcion que retorna los datos procesados del script PHP .
                     var fileInput = document.getElementById("userfile");
@@ -191,7 +245,7 @@ include('application/dataAccessObjects/ListFiles.php');
                 complete: function (data) {
                 },
                 error: function (data) {
-                    console.log(data.responseText);
+                    console.log(data.dataText);
                 }
             });
 
