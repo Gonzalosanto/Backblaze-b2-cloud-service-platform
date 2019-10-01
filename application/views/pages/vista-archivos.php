@@ -67,7 +67,7 @@ include('application/dataAccessObjects/ListFiles.php');
                 <input type="file" name="userfile" id="userfile" ><br>
                 <div class="progress"></div>
                 <button type="button" class="btn btn-primary" name="botonUpload" id="botonUpload" onclick="subir();" >Enviar</button>
-                <button type="button" class="btn btn-primary" name="otroArchivo" id="botonUpload" onclick="copiar_formulario();" >Subir otro archivo</button>
+                <button type="button" class="btn btn-primary" name="otroArchivo" id="botonUpload" disabled="true" onclick="copiar_formulario();" >Subir otro archivo</button>
             </fieldset>
         </form>
     </div>
