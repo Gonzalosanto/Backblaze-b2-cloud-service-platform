@@ -90,7 +90,7 @@ include('application/dataAccessObjects/ListFiles.php');
      
      
      
-     <td><form action="index.php/downloadFile/' . $nomArchivo . '" method="GET">
+     <td><form action="downloadFile/' . $nomArchivo . '" method="GET">
       <input type="hidden" name="filename" value="' . $nomArchivo . '">
       <input type="submit" value="Descargar"></form></p></td>
 
@@ -278,7 +278,7 @@ include('application/dataAccessObjects/ListFiles.php');
             }
 
 
-            xmlhttp.open("post", "<?php echo base_url("index.php/uploadFile") ?>", true);
+            xmlhttp.open("post", "<?php echo base_url("uploadFile") ?>", true);
             xmlhttp.send();
         }
         //peticion AJAX para subir el archivo

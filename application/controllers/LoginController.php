@@ -12,8 +12,6 @@ class LoginController extends CI_Controller {
     }
 
     public function validation() {
-
-
         $user = $_POST["inputUser"];
         $pass = $_POST["password"];
 
@@ -23,10 +21,6 @@ class LoginController extends CI_Controller {
             $_SESSION['authorized'] = true;
             $_SESSION['user'] = $user;
             $_SESSION['password'] = $pass;
-            //var_dump($_POST);
-            // unset($_POST);
-            //var_dump($_POST);
-
 
             redirect('LoginController/table');
         } else {
@@ -35,9 +29,8 @@ class LoginController extends CI_Controller {
         }
     }
 
-    public function table() {
-        $this->load->helper('url');
-        $this->load->view('pages/table_carga');
+    public function listarArchivos() {
+        $this->load->view('pages/vista-archivos');
     }
 
 }
