@@ -54,6 +54,7 @@ $route['default_controller'] = 'welcome/index';
 $route['listar-archivos']= 'LoginController/listarArchivos';
 $route['home']= 'LoginController/validation';
 $route['uploadFile2'] = 'UploadController/uploadFile2';
+$route['deleteFile'] = 'DeleteController/deleteFile';
 $route['downloadFile/:any'] = 'DownloadController/downloadFile';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

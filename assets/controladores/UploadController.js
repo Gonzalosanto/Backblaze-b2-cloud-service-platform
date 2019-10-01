@@ -50,7 +50,8 @@ function subir() {
                 },
                 success: function (datos) { //Funcion que retorna los datos procesados del script PHP .
                     alert("Subido exitosamente");
-//                    location.reload();
+                    $('#botonUpload').attr("disabled", false);
+                    location.reload();
                 },
                 error: function (data) {
                     alert("Hubo un error al subir el archivo " + file.name);

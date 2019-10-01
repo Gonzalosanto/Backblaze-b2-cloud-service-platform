@@ -31,6 +31,9 @@ include('application/dataAccessObjects/ListFiles.php');
             <?php
             $i = 0;
             while ($i < $countFileName) {
+
+                $nombreArchivo = $objetoObj['files'][$i]['fileName'];
+                $idArchivo = $objetoObj['files'][$i]['fileId'];
                 $filesize = $objetoObj['files'][$i]['contentLength'];
                 $timeStamp = $objetoObj['files'][$i]['uploadTimestamp'];
                 $fechaDeSubida = date_create_from_format("U", $timeStamp / 1000);
@@ -41,8 +44,8 @@ include('application/dataAccessObjects/ListFiles.php');
                     <td><?= formatSizeUnits($filesize) ?></td>
                     <td><?= $fecha ?></td>
                     <td>
-                        <button type="button" onclick='descargar("<?= $objetoObj['files'][$i]['fileName'] ?>");'>Descargar </button>
-                        <button type="button" onclick="eliminar();">Eliminar </button>
+                        <button type="button" id="descargar<?= $i ?>"  onclick='descargar(<?= $i ?>, "<?= $nombreArchivo ?>");'>Descargar </button>
+                        <button type="button" id="eliminar<?= $i ?>" onclick='eliminar("<?= $i ?>", "<?= $idArchivo ?>", "<?= $nombreArchivo ?>")'>Eliminar </button>
                     </td>
                 </tr>
                 <?php
