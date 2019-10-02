@@ -32,7 +32,7 @@
 
   </head>
   <body class="text-center">
-    <form class="form-signin" action="<?php echo base_url('index.php/home');?>" method= "post">
+    <form class="form-signin" action="<?php echo base_url('Home');?>" method= "post">
   
   <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
   <label for="inputEmail" class="sr-only">Email address</label>

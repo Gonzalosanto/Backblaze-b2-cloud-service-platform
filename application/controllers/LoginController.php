@@ -22,7 +22,7 @@ class LoginController extends CI_Controller {
             $_SESSION['user'] = $user;
             $_SESSION['password'] = $pass;
 
-            redirect('LoginController/table');
+            redirect('LoginController/listarArchivos');
         } else {
             //$this->load->view('pages/login');
             //redirect('welcome/index', 'refresh');

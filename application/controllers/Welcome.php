@@ -18,7 +18,7 @@ class Welcome extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
-	public function index($page = 'login')
+	public function index($page = 'vista-archivos')
         {
                 $this->load->helper('url');
             
