@@ -1,5 +1,5 @@
 function subir() {
-    
+
     $('#botonUpload').attr("disabled", true);
     $.ajax({
         url: 'UploadController/uploadFile2',
@@ -16,11 +16,11 @@ function subir() {
                         if (evt.lengthComputable) {
                             var percentComplete = evt.loaded / evt.total;
                             console.log(percentComplete);
-                            $('.progress').css({
+                            $('#progress').css({
                                 width: percentComplete * 100 + '%'
                             });
                             if (percentComplete === 1) {
-                                $('.progress').addClass('hide');
+                                $('#progress').addClass('hide');
                             }
                         }
                     }, false);
@@ -28,7 +28,7 @@ function subir() {
                         if (evt.lengthComputable) {
                             var percentComplete = evt.loaded / evt.total;
                             console.log(percentComplete);
-                            $('.progress').css({
+                            $('#progress').css({
                                 width: percentComplete * 100 + '%'
                             });
                         }
@@ -57,7 +57,7 @@ function subir() {
                 error: function (data) {
                     alert("Hubo un error al subir el archivo " + file.name);
                     $('#botonUpload').attr("disabled", false);
-                    $('.progress').removeClass('hide');
+                    $('#progress').removeClass('hide');
                 }
             });
         },
@@ -92,7 +92,13 @@ function subir() {
 //        }
 //    });
 }
+
+var numero_formulario = 0;
+
 function copiar_formulario() {
-    alert("subir Archivo");
-    $("#fileform").clone().appendTo("#form_subir_archivo");
+
+    var formulario = "<div id='fileform'><fieldset><legend>Select file to upload:</legend><label for='userfile'>Archivo:</label><input type='file' name='userfile" + numero_formulario + "' id='userfile" + numero_formulario + "'><div id='progress" + numero_formulario + "'></div><button type='button' id='botonUpload" + numero_formulario + "' onclick='subir();'>Enviar</button></fieldset></div>";
+    numero_formulario++;
+    $("#form_subir_archivo").html(formulario);
+//    $(this).appendTo("#form_subir_archivo");
 }

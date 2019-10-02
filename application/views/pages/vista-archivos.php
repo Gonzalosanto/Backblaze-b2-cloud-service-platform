@@ -59,17 +59,27 @@ include('application/dataAccessObjects/ListFiles.php');
 
     <br>
 
-    <div id="form_subir_archivo">
-        <form  id="fileform"  method="post" enctype="multipart/form-data" action="">
-            <fieldset>
-                <legend>Select file to upload:</legend>
-                <label for="userfile">Archivo:</label>
-                <input type="file" name="userfile" id="userfile" ><br>
-                <div class="progress"></div>
-                <button type="button" class="btn btn-primary" name="botonUpload" id="botonUpload" onclick="subir();" >Enviar</button>
-                <button type="button" class="btn btn-primary" name="otroArchivo" id="botonUpload" disabled="true" onclick="copiar_formulario();" >Subir otro archivo</button>
-            </fieldset>
-        </form>
+    <!--    <div id='form_subir_archivo'>
+            <form  id='fileform'>
+                <fieldset>
+                    <legend>Select file to upload:</legend>
+                    <label for='userfile'>Archivo:</label>
+                    <input type='file' name='userfile' id='userfile' ><br>
+                    <div id='progress'></div>
+                    <button type='button' id='botonUpload' onclick='subir();' >Enviar</button>
+                    <button type='button' id='botonUpload' onclick='copiar_formulario();'>Subir otro archivo</button>
+                </fieldset>
+            </form>
+        </div>-->
+
+    <button type='button' onclick='copiar_formulario();'>+</button>
+    <div id='form_subir_archivo'>
+        
+<!--        <div id='fileform'>
+            <input type='file' name='userfile' id='userfile' ><br>
+            <div id='progress'></div>
+            <button type='button' id='botonUpload' onclick='subir();' >Enviar</button>
+        </div>-->
     </div>
 
     <script src='<?php echo base_url("assets/js/vieja/jquery-3.2.1.min.js"); ?>'></script>
