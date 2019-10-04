@@ -1,8 +1,8 @@
 <?php
 
 function Request() {
-    $application_key_id = "0007481e2c43a070000000002"; // Obtained from your B2 account page
-    $application_key = "K0004e0jBPIHRPRHgk3d/48u3bJb0o4"; // Obtained from your B2 account page
+    $application_key_id = "2aa0ff982e17"; // Obtained from your B2 account page
+    $application_key = "000bd0f610760ead7bd8aaef03371e309f7b524bb5"; // Obtained from your B2 account page
     $credentials = base64_encode($application_key_id . ":" . $application_key);
     $url = "https://api.backblazeb2.com/b2api/v2/b2_authorize_account";
 

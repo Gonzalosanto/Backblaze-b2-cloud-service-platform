@@ -7,8 +7,13 @@ function subir() {
         success: function (dataobject) { //Funcion que retorna los datos procesados del script PHP .
             var fileInput = document.getElementById("userfile");
             var file = fileInput.files[0];
-            var data = new FormData();
-            data.append("file", file);
+            //////////////////////////////////
+            //CAMBIO INTRODUCIDO
+
+            var data = $('input[type=file]')[0].files[0];   //new FormData(); 
+            //data.append("file", file);
+
+            //////////////////////////////
             $.ajax({
                 xhr: function () {
                     var xhr = new window.XMLHttpRequest();
@@ -47,12 +52,13 @@ function subir() {
                     "Content-Type": file.type,
                     "Content-Lenght": file.size,
                     "X-Bz-Content-Sha1": "do_not_verify",
-                    "X-Bz-Info-Author": 'unknown'
+                    "X-Bz-Info-Author": 'unknown'                    
                 },
                 success: function (datos) { //Funcion que retorna los datos procesados del script PHP .
                     alert("Subido exitosamente");
                     $('#botonUpload').attr("disabled", false);
                     location.reload();
+                    
                 },
                 error: function (data) {
                     alert("Hubo un error al subir el archivo " + file.name);
@@ -62,6 +68,7 @@ function subir() {
             });
         },
         complete: function (data) {
+            console.log(data);
         },
         error: function (data) {
             console.log(data.responseText);
