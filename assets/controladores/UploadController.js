@@ -10,7 +10,6 @@ function subir(id) {
             var fileInput = document.getElementById(numero_formulario);
             var file = fileInput.files[0];
 
-            console.log(file);
             var data = new FormData();
             data.append("file", file);
             $.ajax({
