@@ -1,17 +1,15 @@
 function eliminar(id_boton, idArchivo, nombreArchivo) {
-    var r = confirm("Seguro desea eliminar el archivo " + nombreArchivo);
-    if (r == true) {
+    var respuesta = confirm("Seguro desea eliminar el archivo " + nombreArchivo);
+    if (respuesta == true) {
         $("#eliminar" + id_boton).attr("disabled", true);
         $.ajax({
             url: 'DeleteController/deleteFile',
             data: {fileId: idArchivo, fileName: nombreArchivo},
             type: 'POST',
             success: function (dataobject) {
-                alert("Archivo eliminado");
+                alert("Archivo eliminado. Se recargará la página");
                 location.reload();
-                $("#eliminar" + id_boton).attr("disabled", false);
-            },
-            complete: function (data) {
+//                $("#eliminar" + id_boton).attr("disabled", false);
             },
             error: function (data) {
                 console.log(data.responseText);

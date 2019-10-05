@@ -15,7 +15,7 @@ class DownloadController extends CI_Controller {
         // DownloadAuth();
         //Publico
         $download_url = "https://f000.backblazeb2.com"; // From b2_authorize_account call
-        $bucket_name = "archivo1992";  // The NAME of the bucket you want to download from
+        $bucket_name = $this->config->item('bucket_name');  // The NAME of the bucket you want to download from
         $uri = $download_url . "/file/" . $bucket_name . "/" . $fileName;
 
 
@@ -31,7 +31,7 @@ class DownloadController extends CI_Controller {
 //Privado
 
         $download_url = "https://f000.backblazeb2.com"; // From b2_authorize_account call
-        $bucket_name = "archivo1992";  // The NAME of the bucket you want to download from
+        $bucket_name =$this->config->item('bucket_name');  // The NAME of the bucket you want to download from
         $auth_token = $datosAutorizacion->authorizationToken; // From b2_authorize_account call
         $uri = $download_url . "/file/" . $bucket_name . "/" . $fileName;
 
@@ -70,6 +70,25 @@ class DownloadController extends CI_Controller {
         $datosAutorizacion = json_decode(curl_exec($session));
         curl_close($session);
         return $datosAutorizacion;
+    }
+
+    public function authToken() {
+        $credentials = base64_encode($this->config->item('application_key_id') . ":" . $this->config->item('application_key'));
+        $session = curl_init($this->config->item('url_authorization'));
+
+        // Add headers
+        $headers = array();
+        $headers[] = "Accept: application/json";
+        $headers[] = "Authorization: Basic " . $credentials;
+        curl_setopt($session, CURLOPT_HTTPHEADER, $headers);  // Add headers
+
+        curl_setopt($session, CURLOPT_HTTPGET, true);  // HTTP GET
+        curl_setopt($session, CURLOPT_RETURNTRANSFER, true); // Receive server response
+        $datosAutorizacion = curl_exec($session);
+        curl_close($session);
+
+        echo $datosAutorizacion;
+        die();
     }
 
 }

@@ -11,7 +11,7 @@ global $authToken;
 
 $api_url = "$apiURL"; // From b2_authorize_account call
 $auth_token = "$authToken"; // From b2_authorize_account call
-$bucket_id = "47e4c831aec2ece463ca0017";  // The ID of the bucket
+$bucket_id = "42da9a90cf0f89d862de0117";  // The ID of the bucket
 
 $session = curl_init($api_url .  "/b2api/v2/b2_list_file_names");
 

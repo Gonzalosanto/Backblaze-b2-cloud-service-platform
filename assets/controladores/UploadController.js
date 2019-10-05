@@ -1,38 +1,36 @@
 var numero_formulario = 0;
 function subir(id) {
 
-    $('#botonUpload' + numero_formulario).attr("disabled", true);
+    $('#botonUpload' + id).attr("disabled", true);
     $.ajax({
         url: 'UploadController/uploadFile2',
         type: 'POST',
         success: function (dataobject) { //Funcion que retorna los datos procesados del script PHP .
 
-            var fileInput = document.getElementById(numero_formulario);
+            var fileInput = document.getElementById(id);
             var file = fileInput.files[0];
-
-            var data = new FormData();
-            data.append("file", file);
+            var data = $('input[type=file]#' + id)[0].files[0];
+//            var data = $('')[0].files[0]; 
+//            var data = new FormData();
+//            data.append("file", file);
             $.ajax({
                 xhr: function () {
 
                     var xhr = new window.XMLHttpRequest();
-                    $('#progress' + numero_formulario).css({"width": "0%"});
-                    $('#progress' + numero_formulario).css({"background-color": "red"});
-                    $('#progress' + numero_formulario).css({"height": "3px"});
-                    $('#progress' + numero_formulario).css({"text-align": "center"});
-                    $('#progress' + numero_formulario).css({"transition": "width .3s"});
-                    $('#progress' + numero_formulario).css({"margin": "10px;"});
+                    $('#progress' + id).css({"width": "0%"});
+                    $('#progress' + id).css({"background-color": "red"});
+                    $('#progress' + id).css({"height": "3px"});
+                    $('#progress' + id).css({"text-align": "center"});
+                    $('#progress' + id).css({"transition": "width .3s"});
+                    $('#progress' + id).css({"margin": "10px;"});
                     xhr.upload.addEventListener("progress", function (evt) {
                         if (evt.lengthComputable) {
                             var percentComplete = evt.loaded / evt.total;
                             console.log(percentComplete);
-                            $('#progress' + numero_formulario).css({
+                            $('#progress' + id).css({
                                 width: percentComplete * 100 + '%'
                             });
-//                            $('#progress' + numero_formulario).html(percentComplete);
-//                            if (percentComplete === 1) {
-//                                $('#progress' + numero_formulario).addClass('hide');
-//                            }
+
                         }
                     }, false);
                     return xhr;
@@ -52,18 +50,19 @@ function subir(id) {
                     "X-Bz-Info-Author": 'unknown'
                 },
                 success: function (datos) { //Funcion que retorna los datos procesados del script PHP .
-                    alert("Subido exitosamente");
-                    $('#botonUpload' + numero_formulario).attr("disabled", false);
+                    alert("Subido exitosamente. Recuerde recargar la página");
+//                    $('#botonUpload' + numero_formulario).attr("disabled", false);
 //                    location.reload();
                 },
                 error: function (data) {
                     alert("Hubo un error al subir el archivo " + file.name);
-                    $('#botonUpload' + numero_formulario).attr("disabled", false);
-                    $('#progress' + numero_formulario).removeClass('hide');
+                    $('#botonUpload' + id).attr("disabled", false);
+                    $('#progress' + id).removeClass('hide');
                 }
             });
         },
         complete: function (data) {
+            console.log(data);
         },
         error: function (data) {
             console.log(data.responseText);
@@ -77,7 +76,7 @@ function subir(id) {
 
 function copiar_formulario() {
     numero_formulario++;
-    var formulario = "<div id='fileform'><fieldset><legend>Select file to upload:</legend><label for='userfile'>Archivo:</label><input type='file' name='" + numero_formulario + "' id='" + numero_formulario + "'><div id='progress" + numero_formulario + "' class='progress" + numero_formulario + "'> </div><button type='button' id='botonUpload" + numero_formulario + "' onclick='subir(" + numero_formulario + ");'>Enviar</button></fieldset></div>";
+    var formulario = "<br><div id='fileform'><fieldset><legend>Select file to upload:</legend><label for='userfile'>Archivo:</label><input type='file' name='" + numero_formulario + "' id='" + numero_formulario + "'><div id='progress" + numero_formulario + "' class='progress" + numero_formulario + "'> </div><button type='button' id='botonUpload" + numero_formulario + "' onclick='subir(" + numero_formulario + ");'>Enviar</button></fieldset></div>";
 //    numero_formulario++;
 //    $("#form_subir_archivo").html(formulario);
     $("#form_subir_archivo").append($(formulario));

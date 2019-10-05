@@ -11,7 +11,7 @@ include('application/dataAccessObjects/ListFiles.php');
         <title>Panel</title>
         <!--<link href="assets/js/jquery-3.4.1.min"/>-->
         <!------ Include the above in your HEAD tag ---------->
-        <link href="assets/css/progress_bar.css" type="text/css" rel="stylesheet" />
+        <!--<link href="assets/css/progress_bar.css" type="text/css" rel="stylesheet" />-->
 
     </head>
 
@@ -44,8 +44,8 @@ include('application/dataAccessObjects/ListFiles.php');
                     <td><?= formatSizeUnits($filesize) ?></td>
                     <td><?= $fecha ?></td>
                     <td>
-                        <!--<button type="button" id="descargar<?= $i ?>"  onclick='descargar(<?= $i ?>, "<?= $nombreArchivo ?>");'>Descargar </button>-->
-                        <a href="http://localhost/PlataformaWEB/DownloadController/downloadFile?filename=<?= $nombreArchivo ?>">Descargar Archivo</a>
+                        <button type="button" id="descargar<?= $i ?>"  onclick="descarga(<?= $i ?>, '<?= $nombreArchivo ?>');" download >Descargar </button>
+                        <!--<a href="http://localhost/PlataformaWEB/DownloadController/downloadFile?filename=<?= $nombreArchivo ?>" download >Descargar Archivo</a>-->
                         <!--<button type="button" href="http://localhost/PlataformaWEB/DownloadController/downloadFile?filename=7.jpeg" download="7.jpeg" >Descargar </button>-->
                         <button type="button" id="eliminar<?= $i ?>" onclick='eliminar("<?= $i ?>", "<?= $idArchivo ?>", "<?= $nombreArchivo ?>")'>Eliminar </button>
                     </td>
@@ -59,27 +59,9 @@ include('application/dataAccessObjects/ListFiles.php');
 
     <br>
 
-    <!--    <div id='form_subir_archivo'>
-            <form  id='fileform'>
-                <fieldset>
-                    <legend>Select file to upload:</legend>
-                    <label for='userfile'>Archivo:</label>
-                    <input type='file' name='userfile' id='userfile' ><br>
-                    <div id='progress'></div>
-                    <button type='button' id='botonUpload' onclick='subir();' >Enviar</button>
-                    <button type='button' id='botonUpload' onclick='copiar_formulario();'>Subir otro archivo</button>
-                </fieldset>
-            </form>
-        </div>-->
-
     <button type='button' onclick='copiar_formulario();'>+</button>
     <div id='form_subir_archivo'>
-        
-<!--        <div id='fileform'>
-            <input type='file' name='userfile' id='userfile' ><br>
-            <div id='progress'></div>
-            <button type='button' id='botonUpload' onclick='subir();' >Enviar</button>
-        </div>-->
+
     </div>
 
     <script src='<?php echo base_url("assets/js/vieja/jquery-3.2.1.min.js"); ?>'></script>
