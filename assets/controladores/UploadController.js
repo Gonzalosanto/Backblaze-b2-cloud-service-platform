@@ -7,19 +7,6 @@ function subir(id) {
         type: 'POST',
         success: function (dataobject) { //Funcion que retorna los datos procesados del script PHP .
 
-////            var fileInput = $("#userfile" +   numero_formulario);
-////            console.log("userfile" + numero_formulario, fileInput);
-////            var file = $("#userfile" + numero_formulario).val();
-//            var file = document.getElementById("#userfile" + numero_formulario);
-//            console.log(file);
-//            if (file) {
-//                var reader = new FileReader();
-//                reader.readAsText(file);
-//                reader.onload = function (e) {
-//                    alert(e.target.result);
-//                };
-//            }
-
             var fileInput = document.getElementById(numero_formulario);
             var file = fileInput.files[0];
 
@@ -28,7 +15,14 @@ function subir(id) {
             data.append("file", file);
             $.ajax({
                 xhr: function () {
+
                     var xhr = new window.XMLHttpRequest();
+                    $('#progress' + numero_formulario).css({"width": "0%"});
+                    $('#progress' + numero_formulario).css({"background-color": "red"});
+                    $('#progress' + numero_formulario).css({"height": "3px"});
+                    $('#progress' + numero_formulario).css({"text-align": "center"});
+                    $('#progress' + numero_formulario).css({"transition": "width .3s"});
+                    $('#progress' + numero_formulario).css({"margin": "10px;"});
                     xhr.upload.addEventListener("progress", function (evt) {
                         if (evt.lengthComputable) {
                             var percentComplete = evt.loaded / evt.total;
@@ -36,18 +30,10 @@ function subir(id) {
                             $('#progress' + numero_formulario).css({
                                 width: percentComplete * 100 + '%'
                             });
-                            if (percentComplete === 1) {
-                                $('#progress' + numero_formulario).addClass('hide');
-                            }
-                        }
-                    }, false);
-                    xhr.addEventListener("progress", function (evt) {
-                        if (evt.lengthComputable) {
-                            var percentComplete = evt.loaded / evt.total;
-                            console.log(percentComplete);
-                            $('#progress' + numero_formulario).css({
-                                width: percentComplete * 100 + '%'
-                            });
+//                            $('#progress' + numero_formulario).html(percentComplete);
+//                            if (percentComplete === 1) {
+//                                $('#progress' + numero_formulario).addClass('hide');
+//                            }
                         }
                     }, false);
                     return xhr;
@@ -90,10 +76,9 @@ function subir(id) {
 }
 
 
-
 function copiar_formulario() {
     numero_formulario++;
-    var formulario = "<div id='fileform'><fieldset><legend>Select file to upload:</legend><label for='userfile'>Archivo:</label><input type='file' name='" + numero_formulario + "' id='" + numero_formulario + "'><div id='progress" + numero_formulario + "'></div><button type='button' id='botonUpload" + numero_formulario + "' onclick='subir(" + numero_formulario + ");'>Enviar</button></fieldset></div>";
+    var formulario = "<div id='fileform'><fieldset><legend>Select file to upload:</legend><label for='userfile'>Archivo:</label><input type='file' name='" + numero_formulario + "' id='" + numero_formulario + "'><div id='progress" + numero_formulario + "' class='progress" + numero_formulario + "'> </div><button type='button' id='botonUpload" + numero_formulario + "' onclick='subir(" + numero_formulario + ");'>Enviar</button></fieldset></div>";
 //    numero_formulario++;
 //    $("#form_subir_archivo").html(formulario);
     $("#form_subir_archivo").append($(formulario));
