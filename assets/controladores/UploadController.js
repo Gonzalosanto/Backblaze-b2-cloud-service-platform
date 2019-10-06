@@ -9,7 +9,13 @@ function subir(id) {
 
             var fileInput = document.getElementById(id);
             var file = fileInput.files[0];
+
+//            console.log(file.name.replace(" ", "_")); // Cambiar nombre
+
             var data = $('input[type=file]#' + id)[0].files[0];
+            console.log(data.name);
+            data.name = file.name.replace(" ", "_");// Cambiar nombre
+            console.log(data.name);
 //            var data = $('')[0].files[0]; 
 //            var data = new FormData();
 //            data.append("file", file);
