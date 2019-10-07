@@ -1,5 +1,18 @@
 var numero_formulario = 0;
+var numero_intentos = new Array();
+var flag_form = new Array();
 function subir(id) {
+
+    console.log(flag_form[id]);
+    if (flag_form[id] === null) {
+        flag_form.push({id: true});
+        numero_intentos[id] = 0;
+        flag_form[id] = true;
+    }
+
+    console.log(flag_form);
+    console.log(numero_intentos);
+
 
     $('#botonUpload' + id).attr("disabled", true);
     $.ajax({
@@ -29,16 +42,11 @@ function subir(id) {
                     $('#progress' + id).css({"text-align": "center"});
                     $('#progress' + id).css({"transition": "width .3s"});
                     $('#progress' + id).css({"margin": "10px;"});
-                    xhr.upload.addEventListener("progress", function (evt) {
-                        if (evt.lengthComputable) {
-                            var percentComplete = evt.loaded / evt.total;
-                            console.log(percentComplete);
-                            $('#progress' + id).css({
-                                width: percentComplete * 100 + '%'
-                            });
+                    xhr.upload.addEventListener("progress", updateProgress, false);
+                    xhr.upload.addEventListener("load", transferComplete, false);
+                    xhr.upload.addEventListener("error", transferFailed, false);
+                    xhr.upload.addEventListener("abort", transferCanceled, false);
 
-                        }
-                    }, false);
                     return xhr;
                 },
 
@@ -61,6 +69,14 @@ function subir(id) {
 //                    location.reload();
                 },
                 error: function (data) {
+                    if (numero_intentos < 3) {
+                        alert("Hubo un error al subir el archivo " + file.name);
+                        console.log(numero_intentos);
+                        console.log(numero_formulario);
+                        console.log(id);
+                        subir(id);
+                        numero_intentos++;
+                    }
                     alert("Hubo un error al subir el archivo " + file.name);
                     $('#botonUpload' + id).attr("disabled", false);
                     $('#progress' + id).removeClass('hide');
@@ -71,6 +87,7 @@ function subir(id) {
             console.log(data);
         },
         error: function (data) {
+
             console.log(data.responseText);
         }
     });
@@ -87,4 +104,29 @@ function copiar_formulario() {
 //    $("#form_subir_archivo").html(formulario);
     $("#form_subir_archivo").append($(formulario));
 //    $(this).appendTo("#form_subir_archivo");
+}
+
+
+
+// progress on transfers from the server to the client (downloads)
+function updateProgress(evt, id) {
+    if (evt.lengthComputable) {
+        var percentComplete = evt.loaded / evt.total;
+        console.log(percentComplete);
+        $('#progress' + id).css({
+            width: percentComplete * 100 + '%'
+        });
+    }
+}
+
+function transferComplete(evt) {
+    alert("La transferencia del archivo ha sido completada");
+}
+
+function transferFailed(evt) {
+    alert("Ocurrió un error durante la transferencia del archivo");
+}
+
+function transferCanceled(evt) {
+    alert("La transferencia del archivo ha sido cancelada por el usuario");
 }
