@@ -27,8 +27,9 @@ function subir(id) {
 
             var data = $('input[type=file]#' + id)[0].files[0];
             console.log(data.name);
-            data.name = file.name.replace(" ", "_");// Cambiar nombre
-            console.log(data.name);
+            //data.name = filename.replace(/ /g, "_");
+            var name = encodeURIComponent(file.name);// Cambiar nombre
+            console.log(name);
 //            var data = $('')[0].files[0]; 
 //            var data = new FormData();
 //            data.append("file", file);
@@ -57,7 +58,7 @@ function subir(id) {
                 processData: false,
                 contentType: false,
                 headers: {"Authorization": dataobject.authorizationToken,
-                    "X-Bz-File-Name": file.name,
+                    "X-Bz-File-Name": name,
                     "Content-Type": file.type,
                     "Content-Lenght": file.size,
                     "X-Bz-Content-Sha1": "do_not_verify",
