@@ -38,7 +38,7 @@ function descargar(id) {
         type: 'post',
         success: function (dataobject) {
             var objeto = JSON.parse(dataobject);
-            console.log(objeto, "autorization " + objeto.authorizationToken);
+//            console.log(objeto, "autorization " + objeto.authorizationToken);
             var autorization = objeto.authorizationToken;
             var dataURL = 'https://f000.backblazeb2.com/file/bucketPruebas/' + nameFile + "?Authorization=" + autorization + "&b2ContentDisposition=attachment";
             download(dataURL, nameFile);
@@ -67,62 +67,64 @@ function subir(id) {
         type: 'POST',
         success: function (dataobject) { //Funcion que retorna los datos procesados del script PHP .
 
-//  input type='file' name='" + numero_formulario + "' id='" + numero_formulario + "'
+            var fileInput = document.getElementById('id' + id);
+            if (fileInput.files && fileInput.files[0]) {
 
-            var fileInput = document.querySelector('#'+id+' .agregarFile');
+                var file = fileInput.files[0];
 
-//            var fileInput = document.getElementById(id);
-            var file = fileInput.files[0];
+                var data = fileInput;
+                data.name = file.name.replace(" ", "_"); // Cambiar nombre
+                $.ajax({
 
-            var data = $('input[type=file]#' + id)[0].files[0];
-            data.name = file.name.replace(" ", "_"); // Cambiar nombre
-            $.ajax({
+                    xhr: function () {
+                        var xhr = new window.XMLHttpRequest();
+                        $('#progress' + id).css({"width": "0%"});
+                        $('#progress' + id).css({"background-color": "red"});
+                        $('#progress' + id).css({"height": "3px"});
+                        $('#progress' + id).css({"text-align": "center"});
+                        $('#progress' + id).css({"transition": "width .3s"});
+                        $('#progress' + id).css({"margin": "10px;"});
+                        xhr.upload.addEventListener("progress", function (evt) {
+                            if (evt.lengthComputable) {
+                                var percentComplete = evt.loaded / evt.total;
+                                console.log(percentComplete);
+                                $('#progress' + id).css({
+                                    width: percentComplete * 100 + '%'
+                                });
 
-                xhr: function () {
-                    var xhr = new window.XMLHttpRequest();
-                    $('#progress' + id).css({"width": "0%"});
-                    $('#progress' + id).css({"background-color": "red"});
-                    $('#progress' + id).css({"height": "3px"});
-                    $('#progress' + id).css({"text-align": "center"});
-                    $('#progress' + id).css({"transition": "width .3s"});
-                    $('#progress' + id).css({"margin": "10px;"});
-                    xhr.upload.addEventListener("progress", function (evt) {
-                        if (evt.lengthComputable) {
-                            var percentComplete = evt.loaded / evt.total;
-                            console.log(percentComplete);
-                            $('#progress' + id).css({
-                                width: percentComplete * 100 + '%'
-                            });
+                            }
+                        }, false);
+                        return xhr;
+                    },
 
-                        }
-                    }, false);
-                    return xhr;
-                },
+                    url: dataobject.uploadUrl,
+                    type: 'POST',
+                    data: data,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    headers: {"Authorization": dataobject.authorizationToken,
+                        "X-Bz-File-Name": file.name,
+                        "Content-Type": file.type,
+                        "Content-Lenght": file.size,
+                        "X-Bz-Content-Sha1": "do_not_verify",
+                        "X-Bz-Info-Author": 'unknown'
+                    },
+                    success: function (datos) { //Funcion que retorna los datos procesados del script PHP .
+                        listarArchivos();
+                        alert("Subido exitosamente");
 
-                url: dataobject.uploadUrl,
-                type: 'POST',
-                data: data,
-                cache: false,
-                processData: false,
-                contentType: false,
-                headers: {"Authorization": dataobject.authorizationToken,
-                    "X-Bz-File-Name": file.name,
-                    "Content-Type": file.type,
-                    "Content-Lenght": file.size,
-                    "X-Bz-Content-Sha1": "do_not_verify",
-                    "X-Bz-Info-Author": 'unknown'
-                },
-                success: function (datos) { //Funcion que retorna los datos procesados del script PHP .
-                    listarArchivos();
-                    alert("Subido exitosamente");
+                    },
+                    error: function (data) {
+                        alert("Hubo un error al subir el archivo " + file.name);
+                        $('#botonUpload' + id).attr("disabled", false);
+                        $('#progress' + id).removeClass('hide');
+                    }
+                });
+            } else {
+                alert("Debe seleccionar un archivo");
+            }
 
-                },
-                error: function (data) {
-                    alert("Hubo un error al subir el archivo " + file.name);
-                    $('#botonUpload' + id).attr("disabled", false);
-                    $('#progress' + id).removeClass('hide');
-                }
-            });
         },
         complete: function (data) {
             console.log(data);
@@ -138,7 +140,7 @@ function subir(id) {
 
 function copiar_formulario() {
     numero_formulario++;
-    var formulario = "<br><div id='fileform'><fieldset><legend>Select file to upload:</legend><label for='userfile'>Archivo:</label><input type='file' name='" + numero_formulario + "' id='" + numero_formulario + "' class='agregarFile' ><div id='progress" + numero_formulario + "' class='progress" + numero_formulario + "'> </div><button type='button' id='botonUpload" + numero_formulario + "' onclick='subir(" + numero_formulario + ");'>Enviar</button></fieldset></div>";
+    var formulario = "<br><div id='fileform'><fieldset><legend>Select file to upload:</legend><label for='userfile'>Archivo:</label><input type='file' name='" + numero_formulario + "' id='id" + numero_formulario + "' class='agregarFile' ><div id='progress" + numero_formulario + "' class='progress" + numero_formulario + "'> </div><button type='button' id='botonUpload" + numero_formulario + "' onclick='subir(" + numero_formulario + ");'>Enviar</button></fieldset></div>";
     $("#form_subir_archivo").append($(formulario));
 }
 
