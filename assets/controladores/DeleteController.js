@@ -68,12 +68,12 @@ function subir(id) {
         success: function (dataobject) { //Funcion que retorna los datos procesados del script PHP .
 
             var fileInput = document.getElementById('id' + id);
+
             if (fileInput.files && fileInput.files[0]) {
 
                 var file = fileInput.files[0];
 
-                var data = fileInput;
-                data.name = file.name.replace(" ", "_"); // Cambiar nombre
+                file.name = encodeURIComponent(file.name.replace(" ", "_")); // Cambiar nombre
                 $.ajax({
 
                     xhr: function () {
@@ -99,7 +99,7 @@ function subir(id) {
 
                     url: dataobject.uploadUrl,
                     type: 'POST',
-                    data: data,
+                    data: file,
                     cache: false,
                     processData: false,
                     contentType: false,
