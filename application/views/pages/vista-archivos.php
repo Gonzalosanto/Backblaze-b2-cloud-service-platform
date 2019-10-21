@@ -26,7 +26,7 @@ include('application/dataAccessObjects/ListFiles.php');
             <th>Upload date</th>
             <th>Operaciones</th>                      
         </thead>
-        <tbody>
+        <tbody id="dataFiles">
 
             <?php
             $i = 0;
@@ -65,8 +65,6 @@ include('application/dataAccessObjects/ListFiles.php');
     </div>
 
     <script src='<?php echo base_url("assets/js/vieja/jquery-3.2.1.min.js"); ?>'></script>
-    <script src='<?php echo base_url("assets/controladores/UploadController.js"); ?>'></script>
-    <script src='<?php echo base_url("assets/controladores/DownloadController.js"); ?>'></script>
     <script src='<?php echo base_url("assets/controladores/DeleteController.js"); ?>'></script>
 
 </body>

@@ -53,6 +53,7 @@ $route['default_controller'] = 'welcome/index';
 
 $route['listar-archivos']= 'LoginController/listarArchivos';
 $route['home']= 'LoginController/validation';
+$route['listFiles'] = 'listFilesController/listFiles';
 $route['uploadFile2'] = 'UploadController/uploadFile2';
 $route['deleteFile'] = 'DeleteController/deleteFile';
 $route['downloadFile'] = 'DownloadController/downloadFile';
