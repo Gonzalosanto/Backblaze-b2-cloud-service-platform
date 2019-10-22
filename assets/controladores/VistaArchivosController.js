@@ -12,9 +12,7 @@ function listarArchivos() {
         success: function (dataobject) {
             $("#dataFiles").empty();
             lista_archivos = dataobject;
-//            lista_archivos = dataobject.files;
             $.each(dataobject, function (index, value) {
-//                lista_archivos.push(dataobject);
                 var fileName = "<td>" + value.nombreArchivo + "</td>";
                 var uploadTimestamp = "<td>" + value.peso + "</td>";
                 var peso = "<td>" + value.fecha + "</td>";
@@ -38,7 +36,6 @@ function descargar(id) {
         type: 'post',
         success: function (dataobject) {
             var objeto = JSON.parse(dataobject);
-//            console.log(objeto, "autorization " + objeto.authorizationToken);
             var autorization = objeto.authorizationToken;
             var dataURL = 'https://f000.backblazeb2.com/file/bucketPruebas/' + nameFile + "?Authorization=" + autorization + "&b2ContentDisposition=attachment";
             download(dataURL, nameFile);
@@ -87,11 +84,9 @@ function subir(id) {
                         xhr.upload.addEventListener("progress", function (evt) {
                             if (evt.lengthComputable) {
                                 var percentComplete = evt.loaded / evt.total;
-                                console.log(percentComplete);
                                 $('#progress' + id).css({
                                     width: percentComplete * 100 + '%'
                                 });
-
                             }
                         }, false);
                         return xhr;
@@ -112,6 +107,7 @@ function subir(id) {
                     },
                     success: function (datos) { //Funcion que retorna los datos procesados del script PHP .
                         listarArchivos();
+                        $('#progress' + id).css({"background-color": "green"});
                     },
                     error: function (data) {
                         alert("Hubo un error al subir el archivo " + file.name);
@@ -123,10 +119,7 @@ function subir(id) {
                 alert("Debe seleccionar un archivo");
             }
 
-        },
-        complete: function (data) {
-            console.log(data);
-        },
+        },        
         error: function (data) {
             console.log(data.responseText);
         }
@@ -143,8 +136,6 @@ function copiar_formulario() {
 }
 
 function eliminar(id) {
-
-    console.log(lista_archivos);
 
     var idArchivo = lista_archivos[id].idFile;
     var nameFile = lista_archivos[id].nombreArchivo;
@@ -166,17 +157,3 @@ function eliminar(id) {
 
     }
 }
-
-
-//var fileInput = document.getElementsByName(id);
-//$('input[name=' + id + ']').val();
-//console.log($('input[name=' + id + ']').val());
-//var file = $('input[name=' + id + ']').val();
-//
-//subCadena = file[0].split("/", 1);
-//console.log(subCadena);
-//
-//
-//
-//var data = $('input[name=' + id + ']');
-//data.name = $('input[name=' + id + ']').val().replace(" ", "_"); // Cambiar nombre
