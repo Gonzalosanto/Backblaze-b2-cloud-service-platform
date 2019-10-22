@@ -29,36 +29,21 @@ class ListFilesController extends CI_Controller {
         curl_close($session); // Clean up
         header('Content-Type: application/json');
 
-//        $array_server_output = json_decode($server_output);
-//
-//        $i = 0;
-//        foreach ($array_server_output as $value) {
-//            var_dump($value);
-//            echo "mal mal";
-//            foreach ($value as $val) {
-//                $array_server_output[$i]=var_dump(date_format(date_create_from_format("U", $val->uploadTimestamp / 1000), 'Y-m-d'));
-//            }
-//            echo "mal mal";
-//            die();
-////            $array_server_output[0]['fecha']=;
-//            $i++;
-//        }
-
-
-//        $nombreArchivo = $objetoObj['files'][$i]['fileName'];
-//        $idArchivo = $objetoObj['files'][$i]['fileId'];
-//        $filesize = $objetoObj['files'][$i]['contentLength'];
-//        $timeStamp = $objetoObj['files'][$i]['uploadTimestamp'];
-//        $fechaDeSubida = date_create_from_format("U", $timeStamp / 1000);
-//        $fecha = date_format($fechaDeSubida, 'Y-m-d');
-//
-//        $objetoObj['files'][$i]['fileName'];
-//        formatSizeUnits($filesize);
-//        $fecha
-
-//        die();
-
-        echo $server_output; // Tell me about the rabbits, George!
+        $array_server_output = json_decode($server_output);
+        
+        foreach ($array_server_output as $value) {
+            if (!empty($value)) {
+                foreach ($value as $val) {
+                    $array_salida [] = array(
+                        'fecha' => date_format(date_create_from_format("U", $val->uploadTimestamp / 1000), 'Y-m-d'),
+                        'nombreArchivo' => $val->fileName,
+                        'peso' => $this->formatSizeUnits($val->contentLength),
+                        'idFile'=>$val->fileId
+                    );
+                }
+            }
+        }
+        echo json_encode($array_salida); // Tell me about the rabbits, George!
         die();
     }
 
@@ -79,22 +64,24 @@ class ListFilesController extends CI_Controller {
         return $datosAutorizacion;
     }
 
-    //    function formatSizeUnits($bytes) {
-    //        if ($bytes >= 1073741824) {
-    //            $bytes = number_format($bytes / 1073741824, 2) . ' GB';
-    //        } elseif ($bytes >= 1048576) {
-    //            $bytes = number_format($bytes / 1048576, 2) . ' MB';
-    //        } elseif ($bytes >= 1024) {
-    //            $bytes = number_format($bytes / 1024, 2) . ' KB';
-    //        } elseif ($bytes > 1) {
-    //            $bytes = $bytes . ' bytes';
-    //        } elseif ($bytes == 1) {
-    //            $bytes = $bytes . ' byte';
-    //        } else {
-    //            $bytes = '0 bytes';
-    //        }
-    //
-    //        return $bytes;
-    //    }
+    public function formatSizeUnits($bytes) {
+        if ($bytes >= 1073741824) {
+            $bytes = number_format($bytes / 1073741824, 2) . ' GB';
+        } elseif ($bytes >= 1048576) {
+            $bytes = number_format($bytes / 1048576, 2) . ' MB';
+        } elseif ($bytes >= 1024) {
+            $bytes = number_format($bytes / 1024, 2) . ' KB';
+        } elseif ($bytes > 1) {
+            $bytes = $bytes . ' bytes';
+        } elseif ($bytes == 1) {
+            $bytes = $bytes . ' byte';
+        } else {
+            $bytes = '0 bytes';
+        }
+
+        return $bytes;
+    }
+
 }
+
 ?>

@@ -1,7 +1,3 @@
-<?php
-//header('Access-Control-Allow-Origin: *');
-include('application/dataAccessObjects/ListFiles.php');
-?>
 <html>
     <head>  
         <meta charset="utf-8">
@@ -27,33 +23,7 @@ include('application/dataAccessObjects/ListFiles.php');
             <th>Operaciones</th>                      
         </thead>
         <tbody id="dataFiles">
-
-            <?php
-            $i = 0;
-            while ($i < $countFileName) {
-
-                $nombreArchivo = $objetoObj['files'][$i]['fileName'];
-                $idArchivo = $objetoObj['files'][$i]['fileId'];
-                $filesize = $objetoObj['files'][$i]['contentLength'];
-                $timeStamp = $objetoObj['files'][$i]['uploadTimestamp'];
-                $fechaDeSubida = date_create_from_format("U", $timeStamp / 1000);
-                $fecha = date_format($fechaDeSubida, 'Y-m-d');
-                ?>
-                <tr>
-                    <td><?= $objetoObj['files'][$i]['fileName'] ?></td>
-                    <td><?= formatSizeUnits($filesize) ?></td>
-                    <td><?= $fecha ?></td>
-                    <td>
-                        <button type="button" id="descargar<?= $i ?>"  onclick="descarga(<?= $i ?>, '<?= $nombreArchivo ?>');" download >Descargar </button>
-                        <!--<a href="http://localhost/PlataformaWEB/DownloadController/downloadFile?filename=<?= $nombreArchivo ?>" download >Descargar Archivo</a>-->
-                        <!--<button type="button" href="http://localhost/PlataformaWEB/DownloadController/downloadFile?filename=7.jpeg" download="7.jpeg" >Descargar </button>-->
-                        <button type="button" id="eliminar<?= $i ?>" onclick='eliminar("<?= $i ?>", "<?= $idArchivo ?>", "<?= $nombreArchivo ?>")'>Eliminar </button>
-                    </td>
-                </tr>
-                <?php
-                $i++;
-            }
-            ?>
+            
         </tbody>
     </table>
 
@@ -65,6 +35,6 @@ include('application/dataAccessObjects/ListFiles.php');
     </div>
 
     <script src='<?php echo base_url("assets/js/vieja/jquery-3.2.1.min.js"); ?>'></script>
-    <script src='<?php echo base_url("assets/controladores/DeleteController.js"); ?>'></script>
+    <script src='<?php echo base_url("assets/controladores/VistaArchivosController.js"); ?>'></script>
 
 </body>

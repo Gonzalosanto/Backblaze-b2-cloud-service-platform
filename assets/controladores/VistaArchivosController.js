@@ -10,16 +10,17 @@ function listarArchivos() {
         url: 'ListFilesController/listFiles',
         type: 'POST',
         success: function (dataobject) {
-
             $("#dataFiles").empty();
-            lista_archivos = dataobject.files;
-
-            $.each(dataobject.files, function (index, value) {
-                var fileName = "<td>" + value.fileName + "</td>";
-                var uploadTimestamp = "<td>" + value.uploadTimestamp + "</td>";
+            lista_archivos = dataobject;
+//            lista_archivos = dataobject.files;
+            $.each(dataobject, function (index, value) {
+//                lista_archivos.push(dataobject);
+                var fileName = "<td>" + value.nombreArchivo + "</td>";
+                var uploadTimestamp = "<td>" + value.peso + "</td>";
+                var peso = "<td>" + value.fecha + "</td>";
                 var botonDescargar = "<button type='button' id=" + index + " onclick='descargar(this.id);' download > Descargar </button>";
                 var botonEliminar = "<button type='button' id=" + index + " onclick='eliminar(this.id);' > Eliminar </button>";
-                $("#dataFiles").append("<tr id='" + index + "'>" + fileName + uploadTimestamp + uploadTimestamp + "<td id='botonera'> "
+                $("#dataFiles").append("<tr id='" + index + "'>" + fileName + peso + uploadTimestamp + "<td id='botonera'> "
                         + botonDescargar + " " + botonEliminar + "</td></tr>");
             });
         },
@@ -31,8 +32,7 @@ function listarArchivos() {
 
 function descargar(id) {
 
-    var nameFile = lista_archivos[id].fileName;
-
+    var nameFile = lista_archivos[id].nombreArchivo;
     $.ajax({
         url: 'DownloadController/authToken',
         type: 'post',
@@ -112,8 +112,6 @@ function subir(id) {
                     },
                     success: function (datos) { //Funcion que retorna los datos procesados del script PHP .
                         listarArchivos();
-                        alert("Subido exitosamente");
-
                     },
                     error: function (data) {
                         alert("Hubo un error al subir el archivo " + file.name);
@@ -146,17 +144,19 @@ function copiar_formulario() {
 
 function eliminar(id) {
 
-    var idArchivo = lista_archivos[id].fileId;
-    var nombreArchivo = lista_archivos[id].fileName;
-    var respuesta = confirm("Seguro desea eliminar el archivo " + nombreArchivo);
+    console.log(lista_archivos);
+
+    var idArchivo = lista_archivos[id].idFile;
+    var nameFile = lista_archivos[id].nombreArchivo;
+
+    var respuesta = confirm("Seguro desea eliminar el archivo " + nameFile);
 
     if (respuesta === true) {
         $.ajax({
             url: 'DeleteController/deleteFile',
-            data: {fileId: idArchivo, fileName: nombreArchivo},
+            data: {fileId: idArchivo, fileName: nameFile},
             type: 'POST',
             success: function (dataobject) {
-                alert("Archivo eliminado. Se recargará la página");
                 listarArchivos();
             },
             error: function (data) {
