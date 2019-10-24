@@ -70,7 +70,7 @@ function subir(id) {
 
                 var file = fileInput.files[0];
 
-                file.name = encodeURIComponent(file.name.replace(" ", "_")); // Cambiar nombre
+                var filename = encodeURIComponent(file.name); // Cambiar nombre
                 $.ajax({
 
                     xhr: function () {
@@ -99,7 +99,7 @@ function subir(id) {
                     processData: false,
                     contentType: false,
                     headers: {"Authorization": dataobject.authorizationToken,
-                        "X-Bz-File-Name": file.name,
+                        "X-Bz-File-Name": filename,
                         "Content-Type": file.type,
                         "Content-Lenght": file.size,
                         "X-Bz-Content-Sha1": "do_not_verify",
@@ -110,7 +110,7 @@ function subir(id) {
                         $('#progress' + id).css({"background-color": "green"});
                     },
                     error: function (data) {
-                        alert("Hubo un error al subir el archivo " + file.name);
+                        alert("Hubo un error al subir el archivo " + filename);
                         $('#botonUpload' + id).attr("disabled", false);
                         $('#progress' + id).removeClass('hide');
                     }
