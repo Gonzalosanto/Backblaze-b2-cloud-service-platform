@@ -57,7 +57,8 @@ function descargar(id) {
 var numero_formulario = 0;
 
 function subir(id) {
-
+    var start = Date.now();
+    console.log(start);
     $('#botonUpload' + id).attr("disabled", true);
     $.ajax({
         url: 'UploadController/uploadFile2',
@@ -84,6 +85,15 @@ function subir(id) {
                         xhr.upload.addEventListener("progress", function (evt) {
                             if (evt.lengthComputable) {
                                 var percentComplete = evt.loaded / evt.total;
+                                var tiempoActual = Date.now();
+                                console.log('Tiempo actual: ' + tiempoActual);
+                                console.log('Tiempo Transcurrido');
+                                console.log(tiempoActual - start)/1000;
+                                console.log('Tiempo Restante');
+                                console.log((tiempoActual - start) / (percentComplete * 1000));
+                                console.log('FORMATO HORA');
+                                console.log(secondsToTime((tiempoActual - start) / (percentComplete * 1000)));
+                                console.log('Porcentaje: ' + (percentComplete*100));
                                 $('#progress' + id).css({
                                     width: percentComplete * 100 + '%'
                                 });
@@ -119,7 +129,7 @@ function subir(id) {
                 alert("Debe seleccionar un archivo");
             }
 
-        },        
+        },
         error: function (data) {
             console.log(data.responseText);
         }
@@ -156,4 +166,21 @@ function eliminar(id) {
         });
 
     }
+}
+
+
+function secondsToTime(s) {
+
+    function addZ(n) {
+        return (n < 10 ? '0' : '') + n;
+    }
+
+    var ms = s % 1000;
+    s = (s - ms) / 1000;
+    var secs = s % 60;
+    s = (s - secs) / 60;
+    var mins = s % 60;
+    var hrs = (s - mins) / 60;
+
+    return addZ(hrs) + ':' + addZ(mins) + ':' + addZ(secs) + '.' + addZ(ms);
 }
