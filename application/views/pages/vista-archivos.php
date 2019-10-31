@@ -61,12 +61,23 @@ include('application/dataAccessObjects/ListFiles.php');
 
     <button type='button' onclick='copiar_formulario();'>+</button>
     <div id='form_subir_archivo'>
-
     </div>
+
+                <form  id="fileform" class="fileform" method="post" action="uploadLargeFile" enctype="multipart/form-data">
+                    Select a large file to upload:
+                    <input type="file" name="archivo" id="archivo" style="width:100%;"><br>
+                    <input type="submit" name="botonUpload" id="botonUpload" value="Upload">
+
+                </form> 
+   <!-- <button type='button' onclick='copiar_formulario_subida_partes();'>Subir archivo por partes (1gb +)</button>
+    <div id='form_subir_archivo_partes'>
+    </div>-->
+    
 
     <script src='<?php echo base_url("assets/js/vieja/jquery-3.2.1.min.js"); ?>'></script>
     <script src='<?php echo base_url("assets/controladores/UploadController.js"); ?>'></script>
     <script src='<?php echo base_url("assets/controladores/DownloadController.js"); ?>'></script>
     <script src='<?php echo base_url("assets/controladores/DeleteController.js"); ?>'></script>
+    <script src='<?php echo base_url("assets/controladores/UploadByParts.js"); ?>'></script>
 
 </body>
