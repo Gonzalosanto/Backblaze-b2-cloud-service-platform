@@ -51,6 +51,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $route['default_controller'] = 'welcome/index';
 
+$route['subir']= 'ServiceUploadController/uploadFile';
+
 $route['listar-archivos']= 'LoginController/listarArchivos';
 $route['home']= 'LoginController/validation';
 $route['listFiles'] = 'listFilesController/listFiles';
