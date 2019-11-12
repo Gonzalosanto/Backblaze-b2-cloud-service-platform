@@ -54,13 +54,36 @@ function descargar(id) {
 
 }
 
-var numero_formulario = 0;
+function subir (id){
 
-function subir(id) {
+var fileInput = document.getElementById('id' + id);
+var file = fileInput.files[0];
+//var filename = encodeURIComponent(file.name); // Cambiar nombre
+$('#botonUpload' + id).attr("disabled", true);
+$.ajax({
+    url: 'UploadToServerController/uploadFile',
+    type:'post',
+    data:file,
+    cache: false,
+    processData: false,
+    contentType: false,
+    success: function(){
+        console.log("Archivo subido al server");
+    },
+    error: function(){
+     console.log("Error al subir el archivo al server");   
+    }
+
+});
+
+}
+//var numero_formulario = 0;
+
+/*function subir(id) {
 
     $('#botonUpload' + id).attr("disabled", true);
     $.ajax({
-        url: 'UploadController/uploadFile2',
+        url: 'UploadToServerController/uploadFile',
         type: 'POST',
         success: function (dataobject) { //Funcion que retorna los datos procesados del script PHP .
 
@@ -123,7 +146,7 @@ function subir(id) {
         error: function (data) {
             console.log(data.responseText);
         }
-    });
+    });*/
 
 // https://stackoverflow.com/questions/15410265/file-upload-progress-bar-with-jquery
 
