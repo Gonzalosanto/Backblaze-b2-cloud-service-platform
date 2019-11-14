@@ -54,29 +54,31 @@ function descargar(id) {
 
 }
 
-function subir (id){
+/*function subir (){
 
-var fileInput = document.getElementById('id' + id);
+var fileInput = document.getElementById('idArchivo');
 var file = fileInput.files[0];
 //var filename = encodeURIComponent(file.name); // Cambiar nombre
-$('#botonUpload' + id).attr("disabled", true);
+$('#botonUpload').attr("disabled", true);
 $.ajax({
-    url: 'UploadToServerController/uploadFile',
-    type:'post',
+    url: 'subirArchivo',
+    type:'POST',
     data:file,
     cache: false,
     processData: false,
     contentType: false,
-    success: function(){
+    success: function(data){
         console.log("Archivo subido al server");
+        alert(data);
     },
-    error: function(){
+    error: function(data){
      console.log("Error al subir el archivo al server");   
+     alert(data);
     }
 
 });
 
-}
+}*/
 //var numero_formulario = 0;
 
 /*function subir(id) {
@@ -150,11 +152,11 @@ $.ajax({
 
 // https://stackoverflow.com/questions/15410265/file-upload-progress-bar-with-jquery
 
-}
+
 
 function copiar_formulario() {
-    numero_formulario++;
-    var formulario = "<br><div id='fileform'><fieldset><legend>Select file to upload:</legend><label for='userfile'>Archivo:</label><input type='file' name='" + numero_formulario + "' id='id" + numero_formulario + "' class='agregarFile' ><div id='progress" + numero_formulario + "' class='progress" + numero_formulario + "'> </div><button type='button' id='botonUpload" + numero_formulario + "' onclick='subir(" + numero_formulario + ");'>Enviar</button></fieldset></div>";
+   // numero_formulario++;
+    var formulario = "<br><form action='subirArchivo' method='POST' enctype='multipart/form-data'> <div id='fileform'><fieldset><legend>Select file to upload:</legend><label for='archivo'>Archivo:</label><input type='file' name='archivo' id='archivo' class='agregarFile' ><div id='progress' class='progress'> </div><button type='submit'>Enviar</button></fieldset></div></form>";
     $("#form_subir_archivo").append($(formulario));
 }
 
