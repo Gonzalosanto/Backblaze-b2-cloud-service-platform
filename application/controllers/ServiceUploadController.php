@@ -4,12 +4,13 @@ class ServiceUploadController extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-//        header("Access-Control-Allow-Origin: *");
         $this->load->helper('url');
     }
 
     public function uploadFile() {
         
+        $solicitarUrlFile= $this->solicitarUrlFile();
+
         $file_name = "deftones.mp3";
         $my_file = "/var/www/html/PlataformaWEB/assets/" . $file_name;
         $handle = fopen($my_file, 'r');
@@ -17,17 +18,18 @@ class ServiceUploadController extends CI_Controller {
         $content_type = mime_content_type($my_file);
         $sha1_of_file_data = sha1_file($my_file);
 
-        $session = curl_init($this->solicitarUrlFile()->uploadUrl);//Provided by b2_get_upload_url
+        $session = curl_init($solicitarUrlFile->uploadUrl);//Provided by b2_get_upload_url
 
 // Add read file as post field
         curl_setopt($session, CURLOPT_POSTFIELDS, $read_file);
 
 // Add headers
         $headers = array();
-        $headers[] = "Authorization: " . $this->solicitarUrlFile()->authorizationToken;//Provided by b2_get_upload_url
+        $headers[] = "Authorization: " . $solicitarUrlFile->authorizationToken;//Provided by b2_get_upload_url
         $headers[] = "X-Bz-File-Name: " . $file_name;
         $headers[] = "Content-Type: " . $content_type;
         $headers[] = "X-Bz-Content-Sha1: " . $sha1_of_file_data;
+        
         curl_setopt($session, CURLOPT_HTTPHEADER, $headers);
 
         curl_setopt($session, CURLOPT_POST, true); // HTTP POST
