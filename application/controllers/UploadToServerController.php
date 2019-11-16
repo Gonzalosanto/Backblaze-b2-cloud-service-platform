@@ -6,28 +6,40 @@ class UploadToServerController extends CI_Controller {
         parent::__construct();
         //header("Access-Control-Allow-Origin: *");
         $this->load->helper('url');
-        $this->load->model(array('a_blog_model'));
+        $this->load->model(array('ServerModel'));
     }
 
     public function subirArchivo(){
 
-        $id_articulo = $this->a_blog_model->listar();
-        echo "<pre>";
-        var_dump($id_articulo);
-        echo "</pre>";
-        die();
-
-        $uploadDir= 'uploads/';
+        $uploadDir= 'uploads/'; //CAMBIAR POR CONFIG PARAM.
         // Check if the form was submitted
         if($_SERVER["REQUEST_METHOD"] == "POST"){
             //MULTIPLE  :   https://www.geeksforgeeks.org/how-to-select-and-upload-multiple-files-with-html-and-php-using-http-post/
+
+            
 
             // Check if file was uploaded without errors
             if(isset($_FILES['archivo']) && $_FILES['archivo']["error"] == 0){
                
                 $filename = $_FILES['archivo']["name"];
                 $filetype = $_FILES['archivo']["type"];
-                $filesize = $_FILES['archivo']["size"];          
+                $filesize = $_FILES['archivo']["size"];
+
+                //DATOS PARA ENVIAR A LA DB
+
+                $data = array(
+                    'id'=> null,
+                    'file_name_original' =>$filename,
+                    'id_file' =>$filename,
+                    'date_created' => date('Y-m-d H:i:s'),
+                    'deleted'=> '0'
+                    
+                );
+                
+
+                $this->ServerModel->subir_archivo($data);
+                $id_file=$this->ServerModel->listar_archivos_id($filename);                
+                $this->ServerModel->new_estatus($id_file);
                
             
                 // Verify file size - 5MB maximum
@@ -40,6 +52,7 @@ class UploadToServerController extends CI_Controller {
                     if(file_exists('uploads/' . $filename)){
                         echo $filename . " already exists.";
                     } else{
+                        $this->ServerModel->inicio_subida_local_php($id_file);
                         move_uploaded_file($_FILES['archivo']["tmp_name"], 'uploads/' . $filename);
                         echo "Your file was uploaded successfully.";
                     } 
