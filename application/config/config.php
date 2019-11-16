@@ -556,7 +556,7 @@ $config['download_url'] = 'https://f000.backblazeb2.com';
 
 $config['url_list_file'] = "/b2api/v2/b2_list_file_names";
 
-
+$config['dir_uploads'] = "/var/www/html/PlataformaWEB/uploads/";
 
 
 

@@ -8,22 +8,21 @@ class ServiceUploadController extends CI_Controller {
         $this->load->model(array('subida_php_backblaze_model'));
     }
 
-    public function uploadFile() {
+    public function uploadFile($id_file, $file_name) {
 
-        $archivo_subir = $this->subida_php_backblaze_model->listar_archivos_a_subir();
+        /* Para Pruebas */
+//        $id_file = 1;
+//        $file_name = "amoroso.jpg";
+        /* Fin Para Pruebas */
+        
+        $my_file = $this->config->item('dir_uploads') . $file_name;
 
-        if (!empty($archivo_subir)) {
-
-            $data["files_id"] = $archivo_subir[0]["id"];
-            $data["estatus_id"] = 3;
+        if (!empty($id_file) && !empty($file_name) && file_exists($my_file)) {
 
             $solicitarUrlFile = $this->solicitarUrlFile();
 
-            $this->subida_php_backblaze_model->inicio_subida_php_backblaze($data);
+            $this->subida_php_backblaze_model->inicio_subida_php_backblaze($id_file);
 
-            $file_name = $archivo_subir[0]["file_name_original"];
-
-            $my_file = "/var/www/html/PlataformaWEB/uploads/" . $file_name;
             $handle = fopen($my_file, 'r');
             $read_file = fread($handle, filesize($my_file));
             $content_type = mime_content_type($my_file);
@@ -47,17 +46,24 @@ class ServiceUploadController extends CI_Controller {
             $server_output = curl_exec($session); // Let's do this!
             curl_close($session); // Clean up
             echo ($server_output); // Tell me about the rabbits, George!
-            
-            $data["estatus_id"] = 4;
-            $this->subida_php_backblaze_model->final_subida_php_backblaze($data);
+
+            $this->subida_php_backblaze_model->final_subida_php_backblaze($id_file);
+            $this->eliminar_archivo_php($my_file, $id_file);
         }
+    }
+
+    public function eliminar_archivo_php($filepath, $id_file) {
+        $this->subida_php_backblaze_model->inicio_eliminar_archivo_php($id_file);
+//        chmod($filepath, 0755);
+        unlink($filepath);
+        $this->subida_php_backblaze_model->final_eliminar_archivo_php($id_file);
     }
 
     public function solicitarUrlFile() {
 
         $datosAutorizacion = $this->autorization();
         $session = curl_init($datosAutorizacion->apiUrl . $this->config->item('url'
-                . '_upload'));
+                        . '_upload'));
 
         // Add post fields
         $data = array("bucketId" => $this->config->item('bucket_id')); // The ID of the bucket you want to upload to
