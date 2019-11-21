@@ -53,6 +53,7 @@ $route['default_controller'] = 'welcome/index';
 
 $route['subir']= 'ServiceUploadController/uploadFile';
 
+
 $route['subirArchivo']= 'UploadToServerController/subirArchivo';
 $route['listar-archivos']= 'LoginController/listarArchivos';
 $route['home']= 'LoginController/validation';

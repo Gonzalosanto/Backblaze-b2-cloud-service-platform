@@ -54,14 +54,38 @@ function descargar(id) {
 
 }
 
-var numero_formulario = 0;
+/*function subir (){
 
-function subir(id) {
-    var start = Date.now();
-    console.log(start);
+var fileInput = document.getElementById('idArchivo');
+var file = fileInput.files[0];
+//var filename = encodeURIComponent(file.name); // Cambiar nombre
+$('#botonUpload').attr("disabled", true);
+$.ajax({
+    url: 'subirArchivo',
+    type:'POST',
+    data:file,
+    cache: false,
+    processData: false,
+    contentType: false,
+    success: function(data){
+        console.log("Archivo subido al server");
+        alert(data);
+    },
+    error: function(data){
+     console.log("Error al subir el archivo al server");   
+     alert(data);
+    }
+
+});
+
+}*/
+//var numero_formulario = 0;
+
+/*function subir(id) {
+
     $('#botonUpload' + id).attr("disabled", true);
     $.ajax({
-        url: 'UploadController/uploadFile2',
+        url: 'UploadToServerController/uploadFile',
         type: 'POST',
         success: function (dataobject) { //Funcion que retorna los datos procesados del script PHP .
 
@@ -71,7 +95,7 @@ function subir(id) {
 
                 var file = fileInput.files[0];
 
-                file.name = encodeURIComponent(file.name.replace(" ", "_")); // Cambiar nombre
+                var filename = encodeURIComponent(file.name); // Cambiar nombre
                 $.ajax({
 
                     xhr: function () {
@@ -85,15 +109,6 @@ function subir(id) {
                         xhr.upload.addEventListener("progress", function (evt) {
                             if (evt.lengthComputable) {
                                 var percentComplete = evt.loaded / evt.total;
-                                var tiempoActual = Date.now();
-                                console.log('Tiempo actual: ' + tiempoActual);
-                                console.log('Tiempo Transcurrido');
-                                console.log(tiempoActual - start)/1000;
-                                console.log('Tiempo Restante');
-                                console.log((tiempoActual - start) / (percentComplete * 1000));
-                                console.log('FORMATO HORA');
-                                console.log(secondsToTime((tiempoActual - start) / (percentComplete * 1000)));
-                                console.log('Porcentaje: ' + (percentComplete*100));
                                 $('#progress' + id).css({
                                     width: percentComplete * 100 + '%'
                                 });
@@ -109,7 +124,7 @@ function subir(id) {
                     processData: false,
                     contentType: false,
                     headers: {"Authorization": dataobject.authorizationToken,
-                        "X-Bz-File-Name": file.name,
+                        "X-Bz-File-Name": filename,
                         "Content-Type": file.type,
                         "Content-Lenght": file.size,
                         "X-Bz-Content-Sha1": "do_not_verify",
@@ -120,7 +135,7 @@ function subir(id) {
                         $('#progress' + id).css({"background-color": "green"});
                     },
                     error: function (data) {
-                        alert("Hubo un error al subir el archivo " + file.name);
+                        alert("Hubo un error al subir el archivo " + filename);
                         $('#botonUpload' + id).attr("disabled", false);
                         $('#progress' + id).removeClass('hide');
                     }
@@ -129,19 +144,19 @@ function subir(id) {
                 alert("Debe seleccionar un archivo");
             }
 
-        },
+        },        
         error: function (data) {
             console.log(data.responseText);
         }
-    });
+    });*/
 
 // https://stackoverflow.com/questions/15410265/file-upload-progress-bar-with-jquery
 
-}
+
 
 function copiar_formulario() {
-    numero_formulario++;
-    var formulario = "<br><div id='fileform'><fieldset><legend>Select file to upload:</legend><label for='userfile'>Archivo:</label><input type='file' name='" + numero_formulario + "' id='id" + numero_formulario + "' class='agregarFile' ><div id='progress" + numero_formulario + "' class='progress" + numero_formulario + "'> </div><button type='button' id='botonUpload" + numero_formulario + "' onclick='subir(" + numero_formulario + ");'>Enviar</button></fieldset></div>";
+   // numero_formulario++;
+    var formulario = "<br><form action='subirArchivo' method='POST' enctype='multipart/form-data'> <div id='fileform'><fieldset><legend>Select file to upload:</legend><label for='archivo'>Archivo:</label><input type='file' name='archivo' id='archivo' class='agregarFile' ><div id='progress' class='progress'> </div><button type='submit'>Enviar</button></fieldset></div></form>";
     $("#form_subir_archivo").append($(formulario));
 }
 
@@ -166,21 +181,4 @@ function eliminar(id) {
         });
 
     }
-}
-
-
-function secondsToTime(s) {
-
-    function addZ(n) {
-        return (n < 10 ? '0' : '') + n;
-    }
-
-    var ms = s % 1000;
-    s = (s - ms) / 1000;
-    var secs = s % 60;
-    s = (s - secs) / 60;
-    var mins = s % 60;
-    var hrs = (s - mins) / 60;
-
-    return addZ(hrs) + ':' + addZ(mins) + ':' + addZ(secs) + '.' + addZ(ms);
 }
