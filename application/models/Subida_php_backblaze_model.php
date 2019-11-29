@@ -15,18 +15,43 @@ class Subida_php_backblaze_model extends CI_Model {
         $this->db->join('files', 'files.id = files_estatus.files_id');
         $this->db->where('estatus_id', 2);
         $this->db->where('files.deleted', 0);
-        $this->db->order_by('files.date_created', 'DESC');
-        $this->db->limit(1);
+        $this->db->where('files_estatus.estatus_actual', 1);
+        $this->db->where('files_estatus.estatus_backblaze', 0);
+        $this->db->order_by('files.date_created', 'ASC');
+//        $this->db->limit(1);
         $query = $this->db->get();
-//SELECT * FROM space_plataforma.files_estatus
-//JOIN space_plataforma.files ON files_estatus.files_id=files.id
-//WHERE estatus_id=2
-//ORDER BY files.date_created DESC
-//LIMIT 1
 
         if ($query->num_rows() >= 1) {
             return $query->result_array();
         }
+    }
+    
+    public function seleccionar_archivo_a_subir() {
+        $this->db->select('*');
+        $this->db->from('files_estatus');
+        $this->db->join('files', 'files.id = files_estatus.files_id');
+        $this->db->where('estatus_id', 2);
+        $this->db->where('files.deleted', 0);
+        $this->db->where('files_estatus.estatus_actual', 1);
+        $this->db->where('files_estatus.estatus_backblaze', 0);
+        $this->db->order_by('files.date_created', 'ASC');
+        $this->db->limit(1);
+        $query = $this->db->get();
+        if ($query->num_rows() >= 1) {
+            return $query->result_array();
+        }
+    }
+
+    public function contar_archivos_a_subir() {
+        $this->db->select('*');
+        $this->db->from('files_estatus');
+        $this->db->join('files', 'files.id = files_estatus.files_id');
+        $this->db->where('estatus_id', 2);
+        $this->db->where('files.deleted', 0);
+        $this->db->where('files_estatus.estatus_actual', 1);
+        $this->db->where('files_estatus.estatus_backblaze', 0);
+        $this->db->order_by('files.date_created', 'ASC');
+        return $this->db->count_all_results();
     }
 
     public function inicio_subida_php_backblaze($id_file) {
@@ -38,16 +63,17 @@ class Subida_php_backblaze_model extends CI_Model {
         $this->db->where('estatus_actual', 1);
         $this->db->update('files_estatus', $data);
 
-        unset($data);//Borrando variable
-        
+        unset($data); //Borrando variable
         // Insertando un nuevo estatus
         $data["files_id"] = $id_file;
         $data["estatus_id"] = 3;
         $this->db->insert('files_estatus', $data);
     }
+    
+    
 
     public function final_subida_php_backblaze($id_file) {
-        
+
         // Actualizando es estatus actual
         $data["estatus_actual"] = 0;
         $this->db->where('files_id', $id_file);
@@ -55,8 +81,7 @@ class Subida_php_backblaze_model extends CI_Model {
         $this->db->where('estatus_actual', 1);
         $this->db->update('files_estatus', $data);
 
-        unset($data);//Borrando variable
-        
+        unset($data); //Borrando variable
         // Insertando un nuevo estatus
         $data["files_id"] = $id_file;
         $data["estatus_id"] = 4;
@@ -64,7 +89,7 @@ class Subida_php_backblaze_model extends CI_Model {
     }
 
     public function inicio_eliminar_archivo_php($id_file) {
-        
+
         // Actualizando es estatus actual
         $data["estatus_actual"] = 0;
         $this->db->where('files_id', $id_file);
@@ -72,8 +97,7 @@ class Subida_php_backblaze_model extends CI_Model {
         $this->db->where('estatus_actual', 1);
         $this->db->update('files_estatus', $data);
 
-        unset($data);//Borrando variable
-        
+        unset($data); //Borrando variable
         // Insertando un nuevo estatus
         $data["files_id"] = $id_file;
         $data["estatus_id"] = 5;
@@ -88,13 +112,13 @@ class Subida_php_backblaze_model extends CI_Model {
         $this->db->where('estatus_actual', 1);
         $this->db->update('files_estatus', $data);
 
-        unset($data);//Borrando variable
-        
+        unset($data); //Borrando variable
         // Insertando un nuevo estatus
         $data["files_id"] = $id_file;
         $data["estatus_id"] = 6;
         $this->db->insert('files_estatus', $data);
     }
+    
 
 //    public function ver_articulo($id) {
 //        $this->db->select('*');

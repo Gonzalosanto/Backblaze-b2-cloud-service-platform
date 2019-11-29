@@ -8,13 +8,29 @@ class ServiceUploadController extends CI_Controller {
         $this->load->model(array('subida_php_backblaze_model'));
     }
 
+    public function serviceUploadFile() {
+        echo "Inicio de proceso proceso ";
+        $cantidad_archivos_subir = $this->subida_php_backblaze_model->contar_archivos_a_subir();
+
+        if ($cantidad_archivos_subir > 0) {
+            $archivo_subir = $this->subida_php_backblaze_model->seleccionar_archivo_a_subir();
+            $file_name= $archivo_subir[0]['file_name_original'];
+            $id= $archivo_subir[0]['id'];
+            $this->uploadFile($id, $file_name);
+            echo "Fin de proceso";
+            die();
+        }else{
+            die();
+        }
+    }
+
     public function uploadFile($id_file, $file_name) {
 
         /* Para Pruebas */
 //        $id_file = 1;
 //        $file_name = "amoroso.jpg";
         /* Fin Para Pruebas */
-        
+
         $my_file = $this->config->item('dir_uploads') . $file_name;
 
         if (!empty($id_file) && !empty($file_name) && file_exists($my_file)) {
