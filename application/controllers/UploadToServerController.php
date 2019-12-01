@@ -11,16 +11,16 @@ class UploadToServerController extends CI_Controller {
     }
 
     public function subirArchivo() {
+        
 
         // Check if the form was submitted
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            //MULTIPLE  :   https://www.geeksforgeeks.org/how-to-select-and-upload-multiple-files-with-html-and-php-using-http-post/
             // Check if file was uploaded without errors
-            if (isset($_FILES['archivo']) && $_FILES['archivo']["error"] == 0) {
+            if (isset($_FILES['file']) && $_FILES['file']["error"] == 0) {
 
-                $filename = $_FILES['archivo']["name"];
-                $filetype = $_FILES['archivo']["type"];
-                $filesize = $_FILES['archivo']["size"];
+                $filename = $_FILES['file']["name"];
+                $filetype = $_FILES['file']["type"];
+                $filesize = $_FILES['file']["size"];
 
                 //DATOS PARA ENVIAR A LA DB
 
@@ -38,32 +38,42 @@ class UploadToServerController extends CI_Controller {
                 $this->ServerModel->new_estatus($id_file);
 
 
-                // Verify file size - 5MB maximum
-                $maxsize = 5 * 1024 * 1024;
+                // Verify file size - 5GB maximum
+                $maxsize = 5*1024 * 1024 * 1024;
                 if ($filesize > $maxsize)
                     die("Error: File size is larger than the allowed limit.");
 
 
 
                 // Check whether file exists before uploading it
-                if (file_exists($this->config->item('dir_uploads') . $filename)) {
-                    echo $filename . " already exists.";
-                } else {
+                if (!(file_exists($this->config->item('dir_uploads') . $filename))) {
+
+                    $variable=true;
                     $this->ServerModel->inicio_subida_local_php($id_file);
-                    move_uploaded_file($_FILES['archivo']["tmp_name"], $this->config->item('dir_uploads') . $filename);
-                    echo "Your file was uploaded successfully.";
+                    move_uploaded_file($_FILES['file']["tmp_name"], $this->config->item('dir_uploads') . $filename);
+                    //echo "Your file was uploaded successfully.";
                     
                     $this->uploadFile($id_file, $filename);
-                    
+                    return json_encode($variable);
+                } else {
+                    return $filename . " already exists.";
+
                 }
             } else {
-                echo "Error: " . $_FILES['archivo']["error"];
+                echo "Error: No se cargo un archivo"; // . $_FILES['file']["error"];
+                
             }
         }
     }
+    // DEVUELVE PROGRESO DE SUBIDA AL CLIENTE
+    public function uploadProgress(){
+        $key = ini_get("session.upload_progress.prefix") . "upload_progress";
+        echo json_encode($_SESSION[$key]);   
+
+    }
 
     public function uploadFile($id_file, $file_name) {
-
+       
         /* Para Pruebas */
 //        $id_file = 1;
 //        $file_name = "amoroso.jpg";
@@ -85,11 +95,11 @@ class UploadToServerController extends CI_Controller {
             $session = curl_init($solicitarUrlFile->uploadUrl); //Provided by b2_get_upload_url
 // Add read file as post field
             curl_setopt($session, CURLOPT_POSTFIELDS, $read_file);
-
+            $namefile=urlencode(utf8_encode($file_name));
 // Add headers
             $headers = array();
             $headers[] = "Authorization: " . $solicitarUrlFile->authorizationToken; //Provided by b2_get_upload_url
-            $headers[] = "X-Bz-File-Name: " . $file_name;
+            $headers[] = "X-Bz-File-Name: " . $namefile;
             $headers[] = "Content-Type: " . $content_type;
             $headers[] = "X-Bz-Content-Sha1: " . $sha1_of_file_data;
 
@@ -103,6 +113,7 @@ class UploadToServerController extends CI_Controller {
 
             $this->subida_php_backblaze_model->final_subida_php_backblaze($id_file);
             $this->eliminar_archivo_php($my_file, $id_file);
+
         }
     }
 

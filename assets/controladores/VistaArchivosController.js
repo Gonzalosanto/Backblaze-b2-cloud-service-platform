@@ -79,86 +79,81 @@ $.ajax({
 });
 
 }*/
-//var numero_formulario = 0;
+var numero_formulario = 0;
 
-/*function subir(id) {
+function subir(id) {
 
     $('#botonUpload' + id).attr("disabled", true);
+    var fileInput = document.getElementById('id'+id);
+    var file = fileInput.files[0];
+    var formdata = new FormData();
+    formdata.append('file', file);
+    
+
     $.ajax({
-        url: 'UploadToServerController/uploadFile',
+        url: 'UploadToServerController/subirArchivo',
         type: 'POST',
-        success: function (dataobject) { //Funcion que retorna los datos procesados del script PHP .
+        cache: false,
+        contentType: false,
+        processData: false,
+        data: formdata,
 
-            var fileInput = document.getElementById('id' + id);
-
-            if (fileInput.files && fileInput.files[0]) {
-
-                var file = fileInput.files[0];
-
-                var filename = encodeURIComponent(file.name); // Cambiar nombre
-                $.ajax({
-
-                    xhr: function () {
-                        var xhr = new window.XMLHttpRequest();
-                        $('#progress' + id).css({"width": "0%"});
-                        $('#progress' + id).css({"background-color": "red"});
-                        $('#progress' + id).css({"height": "3px"});
-                        $('#progress' + id).css({"text-align": "center"});
-                        $('#progress' + id).css({"transition": "width .3s"});
-                        $('#progress' + id).css({"margin": "10px;"});
-                        xhr.upload.addEventListener("progress", function (evt) {
-                            if (evt.lengthComputable) {
-                                var percentComplete = evt.loaded / evt.total;
-                                $('#progress' + id).css({
-                                    width: percentComplete * 100 + '%'
-                                });
-                            }
-                        }, false);
-                        return xhr;
-                    },
-
-                    url: dataobject.uploadUrl,
-                    type: 'POST',
-                    data: file,
-                    cache: false,
-                    processData: false,
-                    contentType: false,
-                    headers: {"Authorization": dataobject.authorizationToken,
-                        "X-Bz-File-Name": filename,
-                        "Content-Type": file.type,
-                        "Content-Lenght": file.size,
-                        "X-Bz-Content-Sha1": "do_not_verify",
-                        "X-Bz-Info-Author": 'unknown'
-                    },
-                    success: function (datos) { //Funcion que retorna los datos procesados del script PHP .
-                        listarArchivos();
-                        $('#progress' + id).css({"background-color": "green"});
-                    },
-                    error: function (data) {
-                        alert("Hubo un error al subir el archivo " + filename);
-                        $('#botonUpload' + id).attr("disabled", false);
-                        $('#progress' + id).removeClass('hide');
-                    }
-                });
-            } else {
-                alert("Debe seleccionar un archivo");
-            }
-
+        //NO FUNCIONA... 
+        /*xhr: function () { 
+            var xhr = new window.XMLHttpRequest();
+            $('#progress' + id).css({"width": "0%"});
+            $('#progress' + id).css({"background-color": "red"});
+            $('#progress' + id).css({"height": "3px"});
+            $('#progress' + id).css({"text-align": "center"});
+            $('#progress' + id).css({"transition": "width .3s"});
+            $('#progress' + id).css({"margin": "10px;"});
+            xhr.upload.addEventListener("progress", function (evt) {
+                if (evt.lengthComputable) {
+                    var percentComplete = evt.loaded / evt.total;
+                    var tiempoActual = Date.now();
+                    console.log('Tiempo actual: ' + tiempoActual);
+                    console.log('Tiempo Transcurrido');
+                    console.log(tiempoActual - start)/1000;
+                    console.log('Tiempo Restante');
+                    console.log((tiempoActual - start) / (percentComplete * 1000));
+                    console.log('FORMATO HORA');
+                    console.log(secondsToTime((tiempoActual - start) / (percentComplete * 1000)));
+                    console.log('Porcentaje: ' + (percentComplete*100));
+                    $('#progress' + id).css({
+                        width: percentComplete * 100 + '%'
+                    });
+                }
+            }, false);
+            return xhr;
+        },     */       
+        success: function (dataobject) {                  
+            alert("El archivo se subio exitosamente al servidor");
+            listarArchivos();
+            $('#progress' + id).css({"background-color": "green"});
         },        
         error: function (data) {
-            console.log(data.responseText);
+            alert("Hubo un error al subir el archivo " + file.name);
+            $('#botonUpload' + id).attr("disabled", false);
+            $('#progress' + id).removeClass('hide');
         }
-    });*/
-
+    });
+}
 // https://stackoverflow.com/questions/15410265/file-upload-progress-bar-with-jquery
 
 
 
 function copiar_formulario() {
+    var phpscript = '<?php echo ini_get("session.upload_progress.name");?>';
+    numero_formulario++;
+    var formulario = "<br><div id='fileform'><fieldset><legend>Select file to upload:</legend><label for='userfile'>Archivo:</label><input type='hidden' value='upload_progress' name='"+phpscript+"' ><input type='file' name='" + numero_formulario + "' id='id" + numero_formulario + "' class='agregarFile' ><div id='progress" + numero_formulario + "' class='progress" + numero_formulario + "'> </div><button type='button' id='botonUpload" + numero_formulario + "' onclick='subir(" + numero_formulario + ");'>Enviar</button></fieldset></div>";
+    $("#form_subir_archivo").append($(formulario));
+}
+
+/*function copiar_formulario() {
    // numero_formulario++;
     var formulario = "<br><form action='subirArchivo' method='POST' enctype='multipart/form-data'> <div id='fileform'><fieldset><legend>Select file to upload:</legend><label for='archivo'>Archivo:</label><input type='file' name='archivo' id='archivo' class='agregarFile' ><div id='progress' class='progress'> </div><button type='submit'>Enviar</button></fieldset></div></form>";
     $("#form_subir_archivo").append($(formulario));
-}
+}*/
 
 function eliminar(id) {
 
