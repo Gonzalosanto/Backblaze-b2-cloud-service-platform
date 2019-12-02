@@ -39,7 +39,7 @@ class UploadToServerController extends CI_Controller {
 
 
                 // Verify file size - 5GB maximum
-                $maxsize = 5*1024 * 1024 * 1024;
+                $maxsize = 6*1024 * 1024 * 1024;
                 if ($filesize > $maxsize)
                     die("Error: File size is larger than the allowed limit.");
 
@@ -53,7 +53,7 @@ class UploadToServerController extends CI_Controller {
                     move_uploaded_file($_FILES['file']["tmp_name"], $this->config->item('dir_uploads') . $filename);
                     //echo "Your file was uploaded successfully.";
                     
-                    $this->uploadFile($id_file, $filename);
+                    //$this->uploadFile($id_file, $filename);
                     return json_encode($variable);
                 } else {
                     return $filename . " already exists.";

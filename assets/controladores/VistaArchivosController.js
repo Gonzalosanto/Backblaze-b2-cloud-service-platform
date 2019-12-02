@@ -98,8 +98,7 @@ function subir(id) {
         processData: false,
         data: formdata,
 
-        //NO FUNCIONA... 
-        /*xhr: function () { 
+        xhr: function () { 
             var xhr = new window.XMLHttpRequest();
             $('#progress' + id).css({"width": "0%"});
             $('#progress' + id).css({"background-color": "red"});
@@ -110,14 +109,14 @@ function subir(id) {
             xhr.upload.addEventListener("progress", function (evt) {
                 if (evt.lengthComputable) {
                     var percentComplete = evt.loaded / evt.total;
-                    var tiempoActual = Date.now();
+                    /*var tiempoActual = Date.now();
                     console.log('Tiempo actual: ' + tiempoActual);
                     console.log('Tiempo Transcurrido');
                     console.log(tiempoActual - start)/1000;
                     console.log('Tiempo Restante');
                     console.log((tiempoActual - start) / (percentComplete * 1000));
                     console.log('FORMATO HORA');
-                    console.log(secondsToTime((tiempoActual - start) / (percentComplete * 1000)));
+                    console.log(secondsToTime((tiempoActual - start) / (percentComplete * 1000)));*/
                     console.log('Porcentaje: ' + (percentComplete*100));
                     $('#progress' + id).css({
                         width: percentComplete * 100 + '%'
@@ -125,7 +124,7 @@ function subir(id) {
                 }
             }, false);
             return xhr;
-        },     */       
+        },            
         success: function (dataobject) {                  
             alert("El archivo se subio exitosamente al servidor");
             listarArchivos();
