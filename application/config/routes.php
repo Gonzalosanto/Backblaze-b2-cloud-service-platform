@@ -51,7 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $route['default_controller'] = 'welcome/index';
 
-$route['subir']= 'ServiceUploadController/uploadFile';
+$route['subirBackblaze']= 'ServiceUploadController/serviceUploadFile';
 
 
 $route['subirArchivo']= 'UploadToServerController/subirArchivo';
