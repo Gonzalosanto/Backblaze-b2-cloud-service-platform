@@ -16,7 +16,7 @@ class Subida_php_backblaze_model extends CI_Model {
         $this->db->where('estatus_id', 2);
         $this->db->where('files.deleted', 0);
         $this->db->where('files_estatus.estatus_actual', 1);
-        $this->db->where('files_estatus.estatus_backblaze', 0);
+      //  $this->db->where('files_estatus.estatus_backblaze', 0);
         $this->db->order_by('files.date_created', 'ASC');
 //        $this->db->limit(1);
         $query = $this->db->get();
@@ -33,7 +33,7 @@ class Subida_php_backblaze_model extends CI_Model {
         $this->db->where('estatus_id', 2);
         $this->db->where('files.deleted', 0);
         $this->db->where('files_estatus.estatus_actual', 1);
-        $this->db->where('files_estatus.estatus_backblaze', 0);
+       // $this->db->where('files_estatus.estatus_backblaze', 0);
         $this->db->order_by('files.date_created', 'ASC');
         $this->db->limit(1);
         $query = $this->db->get();
@@ -49,7 +49,7 @@ class Subida_php_backblaze_model extends CI_Model {
         $this->db->where('estatus_id', 2);
         $this->db->where('files.deleted', 0);
         $this->db->where('files_estatus.estatus_actual', 1);
-        $this->db->where('files_estatus.estatus_backblaze', 0);
+      //  $this->db->where('files_estatus.estatus_backblaze', 0);
         $this->db->order_by('files.date_created', 'ASC');
         return $this->db->count_all_results();
     }

@@ -10,12 +10,15 @@ class ServiceUploadController extends CI_Controller {
 
     public function serviceUploadFile() {
         echo "Inicio de proceso proceso ";
+        set_time_limit(0);
         $cantidad_archivos_subir = $this->subida_php_backblaze_model->contar_archivos_a_subir();
 
         if ($cantidad_archivos_subir > 0) {
             $archivo_subir = $this->subida_php_backblaze_model->seleccionar_archivo_a_subir();
             $file_name= $archivo_subir[0]['file_name_original'];
             $id= $archivo_subir[0]['id'];
+           // echo $file_name, $id;
+           // die();
             $this->uploadFile($id, $file_name);
             echo "Fin de proceso";
             die();
@@ -49,9 +52,10 @@ class ServiceUploadController extends CI_Controller {
             curl_setopt($session, CURLOPT_POSTFIELDS, $read_file);
 
 // Add headers
+            $namefile = urlencode(utf8_encode($file_name));
             $headers = array();
             $headers[] = "Authorization: " . $solicitarUrlFile->authorizationToken; //Provided by b2_get_upload_url
-            $headers[] = "X-Bz-File-Name: " . $file_name;
+            $headers[] = "X-Bz-File-Name: " . $namefile;
             $headers[] = "Content-Type: " . $content_type;
             $headers[] = "X-Bz-Content-Sha1: " . $sha1_of_file_data;
 
@@ -70,7 +74,7 @@ class ServiceUploadController extends CI_Controller {
 
     public function eliminar_archivo_php($filepath, $id_file) {
         $this->subida_php_backblaze_model->inicio_eliminar_archivo_php($id_file);
-//        chmod($filepath, 0755);
+       // chmod($filepath, 0755);
         unlink($filepath);
         $this->subida_php_backblaze_model->final_eliminar_archivo_php($id_file);
     }
