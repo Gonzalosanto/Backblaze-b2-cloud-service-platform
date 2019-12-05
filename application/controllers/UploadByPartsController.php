@@ -17,7 +17,9 @@ class UploadByPartsController extends CI_Controller {
             $archivo_subir = $this->subida_php_backblaze_model->seleccionar_archivo_a_subir();
             $file_name= $archivo_subir[0]['file_name_original'];
             $id= $archivo_subir[0]['id'];
+
             $this->subidaPorPartes($id, $file_name);
+
             echo "Fin de proceso por partes";
             die();
         }else{
@@ -30,9 +32,9 @@ class UploadByPartsController extends CI_Controller {
 
         
         $this->getUploadURLPart($file_name);
-        $this->uploadPart($file_name);
-        $this->finishLargeFiles();
-        echo "Subido";
+       // $this->uploadPart($file_name);
+        $this->finishLargeFiles($file_name, $this->uploadPart($file_name));
+        return "Subido";
 
 
 
@@ -41,7 +43,7 @@ class UploadByPartsController extends CI_Controller {
     public function startLargeFiles($file_name){ //ejecutarlo primero
 
         $datosAutorizacion=$this->autorization();
-        $file_name = $namefile; // File to be uploaded
+        $file_name = $file_name; // File to be uploaded
         $bucket_id = $this->config->item('bucket_id'); // Provided by b2_create_bucket, b2_list_buckets
         $content_type = "application/octet-stream"; // The content type of the file. See b2_start_large_file documentation for more information.
         // Construct the JSON to post
@@ -54,12 +56,12 @@ class UploadByPartsController extends CI_Controller {
         $headers[] = "Authorization: " . $datosAutorizacion->authorizationToken;
         
         // Setup curl to do the post
-        $session = curl_init($api_url . "/b2api/v2/b2_start_large_file");
+        $session = curl_init($datosAutorizacion->apiUrl . "/b2api/v2/b2_start_large_file");
         curl_setopt($session, CURLOPT_HTTPHEADER, $headers);  // Add headers
         curl_setopt($session, CURLOPT_POSTFIELDS, $post_fields); 
         curl_setopt($session, CURLOPT_RETURNTRANSFER, true); // Receive server response
         // Post the data
-        $server_output = curl_exec($session);
+        $server_output = json_decode(curl_exec($session));
         curl_close ($session);
         return $server_output;
 
@@ -68,6 +70,7 @@ class UploadByPartsController extends CI_Controller {
     public function getUploadURLPart($file_name){ //Ejecutar segundo                
       
         $responseStartLargeFile = $this->startLargeFiles($file_name);
+        $datosAutorizacion = $this->autorization();
 
         $file_id = $responseStartLargeFile->fileId; // Obtained from b2_start_large_file
         $account_auth_token = $datosAutorizacion->authorizationToken; // Obtained from b2_authorize_account
@@ -93,13 +96,14 @@ class UploadByPartsController extends CI_Controller {
 
     public function uploadPart($file_name){ //SUBIDA DE file POR PARTES
 
+        $datosAutorizacion=$this->autorization();
         
         function myReadFile($curl_rsrc, $file_pointer, $length) {
             return fread($file_pointer, $length);
         }
         
         // Upload parts
-        $minimum_part_size = 50 * (1000 * 1000); // Obtained from b2_authorize_account. The default is 100 MB
+        $minimum_part_size = 2 * (1000 * 1000); // Obtained from b2_authorize_account. The default is 100 MB
         $local_file = $this->config->item('dir_uploads') . $file_name;
         $local_file_size = filesize($local_file);
         $total_bytes_sent = 0;
@@ -138,7 +142,7 @@ class UploadByPartsController extends CI_Controller {
             curl_setopt($session, CURLOPT_READFUNCTION, "myReadFile");
             $server_output = curl_exec($session);
             curl_close ($session);
-            return $server_output . "\n";
+            print $server_output . "\n";
             
             
             // Prepare for the next iteration of the loop
@@ -155,18 +159,19 @@ class UploadByPartsController extends CI_Controller {
 
     
 
-    public function finishLargeFiles(){ //Al final ejecutarlo
+    public function finishLargeFiles($file_name,$shaArray){ //Al final ejecutarlo
        
-
+        $datosAutorizacion=$this->autorization();
+        $responseStartLargeFile = $this->startLargeFiles($file_name);
                         
         $api_url = $datosAutorizacion->apiUrl; // Obtained from b2_authorize_account
-        $file_id = $responseLargeFile->fileId; // Obtained from b2_start_large_file
+        $file_id = $responseStartLargeFile->fileId; // Obtained from b2_start_large_file
         $sha1_of_parts = $shaArray;  // See b2_upload_part 
         $session = curl_init($api_url . "/b2api/v2/b2_finish_large_file");
 
         //POST FIELDS
-
-
+        $post_fields=json_encode(Array("fileId"=>$file_id,"partSha1Array"=> $sha1_of_parts));
+        //var_dump($post_fields);        
         // Add headers
         $headers = array();
         $headers[] = "Accept: application/json";

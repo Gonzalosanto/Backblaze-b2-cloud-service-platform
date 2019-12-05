@@ -51,14 +51,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $route['default_controller'] = 'welcome/index';
 
-<<<<<<< HEAD
-$route['uploadLargeFile'] = 'UploadByPartsController/finishLargeFiles';
-=======
+
+$route['uploadLargeFile'] = 'UploadByPartsController/subirArchivoPartido';
+
 $route['subirBackblaze']= 'ServiceUploadController/serviceUploadFile';
 
 
 $route['subirArchivo']= 'UploadToServerController/subirArchivo';
->>>>>>> c011967d51fe8c0741245036589846ada6b350ba
+
 $route['listar-archivos']= 'LoginController/listarArchivos';
 $route['home']= 'LoginController/validation';
 $route['listFiles'] = 'listFilesController/listFiles';
