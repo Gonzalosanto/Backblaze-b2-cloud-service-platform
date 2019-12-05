@@ -17,7 +17,7 @@ class UploadByPartsController extends CI_Controller {
             $archivo_subir = $this->subida_php_backblaze_model->seleccionar_archivo_a_subir();
             $file_name= $archivo_subir[0]['file_name_original'];
             $id= $archivo_subir[0]['id'];
-
+            echo $file_name, $id;
             $this->subidaPorPartes($id, $file_name);
 
             echo "Fin de proceso por partes";
@@ -30,17 +30,17 @@ class UploadByPartsController extends CI_Controller {
 
     public function subidaPorPartes($id, $file_name){  //EJECUCION DE SUBIDA POR PARTES
 
-        
-        $this->getUploadURLPart($file_name);
-       // $this->uploadPart($file_name);
-        $this->finishLargeFiles($file_name, $this->uploadPart($file_name));
-        return "Subido";
-
+        $datosAutorizacion=$this->autorization();
+        $responseStartLargeFile= $this->startLargeFiles($file_name,$datosAutorizacion);
+        $urlPart= $this->getUploadURLPart($file_name,$responseStartLargeFile,$datosAutorizacion);
+        $shaArray=$this->uploadPart($id,$file_name,$datosAutorizacion,$urlPart);
+        $this->finishLargeFiles($id,$file_name,$responseStartLargeFile,$datosAutorizacion,$shaArray);
+       
 
 
     }
 
-    public function startLargeFiles($file_name){ //ejecutarlo primero
+    public function startLargeFiles($file_name,$datosAutorizacion){ //ejecutarlo primero
 
         $datosAutorizacion=$this->autorization();
         $file_name = $file_name; // File to be uploaded
@@ -67,10 +67,9 @@ class UploadByPartsController extends CI_Controller {
 
     }
 
-    public function getUploadURLPart($file_name){ //Ejecutar segundo                
+    public function getUploadURLPart($file_name,$responseStartLargeFile,$datosAutorizacion){ //Ejecutar segundo                
       
-        $responseStartLargeFile = $this->startLargeFiles($file_name);
-        $datosAutorizacion = $this->autorization();
+       
 
         $file_id = $responseStartLargeFile->fileId; // Obtained from b2_start_large_file
         $account_auth_token = $datosAutorizacion->authorizationToken; // Obtained from b2_authorize_account
@@ -87,27 +86,29 @@ class UploadByPartsController extends CI_Controller {
         curl_setopt($session, CURLOPT_HTTPHEADER, $headers);  // Add headers
         curl_setopt($session, CURLOPT_POSTFIELDS, $post_fields); 
         curl_setopt($session, CURLOPT_RETURNTRANSFER, true); // Receive server response
-        $server_output = curl_exec($session);
+        $urlPart = json_decode(curl_exec($session));
         curl_close ($session);
-        return $server_output;
+        return $urlPart;
     }
 
     
 
-    public function uploadPart($file_name){ //SUBIDA DE file POR PARTES
+    public function uploadPart($id,$file_name,$datosAutorizacion,$urlPart){ //SUBIDA DE file POR PARTES
+        $this->subida_php_backblaze_model->inicio_subida_php_backblaze($id);
 
-        $datosAutorizacion=$this->autorization();
+        set_time_limit(0);     
         
-        function myReadFile($curl_rsrc, $file_pointer, $length) {
+        
+        function myReadFile($curl_rsrc,$file_pointer, $length) {
             return fread($file_pointer, $length);
         }
         
         // Upload parts
-        $minimum_part_size = 2 * (1000 * 1000); // Obtained from b2_authorize_account. The default is 100 MB
+        $minimum_part_size = 5 * (1000 * 1000); // Obtained from b2_authorize_account. The default is 5 MB
         $local_file = $this->config->item('dir_uploads') . $file_name;
         $local_file_size = filesize($local_file);
         $total_bytes_sent = 0;
-        $bytes_sent_for_part = 0;
+        //$bytes_sent_for_part = 0;
         $bytes_sent_for_part = $minimum_part_size;
         $sha1_of_parts = Array();
         $part_no = 1;
@@ -126,11 +127,11 @@ class UploadByPartsController extends CI_Controller {
             fseek($file_handle, $total_bytes_sent);
             
             // Send it over th wire
-            $session = curl_init($this->config->item('url_upload'));
+            $session = curl_init($urlPart->uploadUrl);
             // Add headers
             $headers = array();
             $headers[] = "Accept: application/json";
-            $headers[] = "Authorization: " . $datosAutorizacion->authorizationToken;
+            $headers[] = "Authorization: " . $urlPart->authorizationToken;
             $headers[] = "Content-Length: " . $bytes_sent_for_part;
             $headers[] = "X-Bz-Part-Number: " . $part_no;
             $headers[] = "X-Bz-Content-Sha1: " . $sha1_of_parts[$part_no - 1];
@@ -159,11 +160,8 @@ class UploadByPartsController extends CI_Controller {
 
     
 
-    public function finishLargeFiles($file_name,$shaArray){ //Al final ejecutarlo
-       
-        $datosAutorizacion=$this->autorization();
-        $responseStartLargeFile = $this->startLargeFiles($file_name);
-                        
+    public function finishLargeFiles($id,$file_name,$responseStartLargeFile,$datosAutorizacion,$shaArray){ //Al final ejecutarlo
+        $my_file= $this->config->item('dir_uploads') . $file_name;                       
         $api_url = $datosAutorizacion->apiUrl; // Obtained from b2_authorize_account
         $file_id = $responseStartLargeFile->fileId; // Obtained from b2_start_large_file
         $sha1_of_parts = $shaArray;  // See b2_upload_part 
@@ -185,6 +183,16 @@ class UploadByPartsController extends CI_Controller {
         curl_close ($session);
         print $server_output;
 
+        $this->subida_php_backblaze_model->final_subida_php_backblaze($id);
+        $this->eliminar_archivo_php($my_file, $id);
+
+    }
+
+    public function eliminar_archivo_php($filepath, $id) {
+        $this->subida_php_backblaze_model->inicio_eliminar_archivo_php($id);
+//        chmod($filepath, 0755);
+        unlink($filepath);
+        $this->subida_php_backblaze_model->final_eliminar_archivo_php($id);
     }
 
 
