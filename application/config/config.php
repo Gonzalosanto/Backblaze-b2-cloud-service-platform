@@ -540,17 +540,17 @@ $config['proxy_ips'] = '';
   | Comma-separated:	'10.0.1.200,192.168.5.0/24'
   | Array:		array('10.0.1.200', '192.168.5.0/24')
  */
-$config['application_key_id'] = '2aa0ff982e17';
+$config['application_key_id'] = 'App key id here!';
 
-$config['application_key'] = '000bd0f610760ead7bd8aaef03371e309f7b524bb5';
+$config['application_key'] = 'App key here';
 
 $config['url_authorization'] = 'https://api.backblazeb2.com/b2api/v2/b2_authorize_account';
 
-$config['bucket_id'] = '42da9a90cf0f89d862de0117';
+$config['bucket_id'] = 'Bucket Id here';
 
 $config['url_upload'] = '/b2api/v2/b2_get_upload_url';
 
-$config['bucket_name'] = 'bucketPruebas';
+$config['bucket_name'] = 'Introduce bucket name here';
 
 $config['download_url'] = 'https://f000.backblazeb2.com';
 
